@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.Lib", "Chess.Lib\Chess.Lib.csproj", "{C5BA8479-BD1B-47F8-9B78-C1A77A3E81F8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.Ui", "Chess.Ui\Chess.Ui.csproj", "{6FABB18E-7BAB-4464-AD8E-8763AAE4220C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.Tests", "Chess.Tests\Chess.Tests.csproj", "{1F12AAE8-5A26-495C-9099-A493F13927FD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C5BA8479-BD1B-47F8-9B78-C1A77A3E81F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5BA8479-BD1B-47F8-9B78-C1A77A3E81F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5BA8479-BD1B-47F8-9B78-C1A77A3E81F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5BA8479-BD1B-47F8-9B78-C1A77A3E81F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FABB18E-7BAB-4464-AD8E-8763AAE4220C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FABB18E-7BAB-4464-AD8E-8763AAE4220C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FABB18E-7BAB-4464-AD8E-8763AAE4220C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FABB18E-7BAB-4464-AD8E-8763AAE4220C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F12AAE8-5A26-495C-9099-A493F13927FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F12AAE8-5A26-495C-9099-A493F13927FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F12AAE8-5A26-495C-9099-A493F13927FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F12AAE8-5A26-495C-9099-A493F13927FD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3872A77C-6962-48FC-B690-0CC6BDD6F23E}
+	EndGlobalSection
+EndGlobal
