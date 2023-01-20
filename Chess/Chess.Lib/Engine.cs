@@ -181,12 +181,16 @@ namespace Chess.Lib
             return false;
         }
 
+        public void AddToHistory(MoveObject moveObject)
+        {
+
+        }
         // Changes the position on boardbased on given move, 
         public void MakeMove(MoveObject moveObject)
         {
             _board.board[moveObject.EndIndex] = moveObject.SourcePiece;
             _board.board[moveObject.StartIndex] = ".";
-            
+            AddToHistory(moveObject);
             // TODO Implement --> Read / Write method to and from History
 
             ShowBoard();
