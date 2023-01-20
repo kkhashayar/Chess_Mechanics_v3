@@ -187,7 +187,7 @@ namespace Chess.Lib
             _board.board[moveObject.EndIndex] = moveObject.SourcePiece;
             _board.board[moveObject.StartIndex] = ".";
             
-            // 
+            // TODO Implement --> Read / Write method to and from History
 
             ShowBoard();
         }
