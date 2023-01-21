@@ -177,6 +177,37 @@ namespace Chess.Lib
             return false;
         }
 
+        public void SetCastleRules(MoveObject moveObject)
+        {
+            if (moveObject.SourcePiece == "K")
+            {
+                WhiteKingCastle = false;
+                WhiteQueenCastle = false;
+            }
+            if (moveObject.SourcePiece == "k")
+            {
+                BlackKingCastle = false;
+                BlackQueenCastle = false;
+            }
+            if (moveObject.SourcePiece == "R" && moveObject.StartIndex == 63)
+            {
+                WhiteKingCastle = false;
+            }
+            else if (moveObject.SourcePiece == "R" && moveObject.StartIndex == 56)
+            {
+                WhiteQueenCastle = false;
+            }
+            else if (moveObject.SourcePiece == "r" && moveObject.StartIndex == 7)
+            {
+                BlackKingCastle = false;
+            }
+            else if (moveObject.SourcePiece == "r" && moveObject.StartIndex == 0)
+            {
+                BlackQueenCastle = false;
+            }
+
+
+        }
 
         // Basic function, adding the last move to GameHistory, Note: This is not a notation  
         public void AddToHistory(MoveObject moveObject)
@@ -446,7 +477,7 @@ namespace Chess.Lib
         {
             moveObject.BoardStartSquare = _board.GetCoordinates(moveObject.StartIndex);
             moveObject.BoardEndSquare = _board.GetCoordinates(moveObject.EndIndex);
-            
+
             if (moveObject.BoardStartSquare.Substring(0, 1) == moveObject.BoardEndSquare.Substring(0, 1) || // Files
                moveObject.BoardStartSquare.Substring(1, 1) == moveObject.BoardEndSquare.Substring(1, 1)) // Ranks 
             {
@@ -467,7 +498,7 @@ namespace Chess.Lib
         }
 
         public bool GetWhitePawn(MoveObject moveObject)
-        { 
+        {
             Piece pawn = new Piece(moveObject.SourcePiece);
 
             var row = _board.GetCoordinates(moveObject.StartIndex)[1].ToString();
@@ -529,7 +560,7 @@ namespace Chess.Lib
                     // TODO: Might add to properties // looks like no need to check right/left gap 
                     var tempStartIndex = moveObject.StartIndex;
                     var tempEndIndex = moveObject.EndIndex;
-                    
+
 
                     var lastMove = GameHistory.LastOrDefault();
                     LastMovedPiece = lastMove[0].ToString();
@@ -538,7 +569,7 @@ namespace Chess.Lib
                     {
                         var targetObject = _board.board[moveObject.StartIndex - 1];
                         var targetObjectIndex = moveObject.StartIndex - 1;
-                  
+
                         if (_board.board[moveObject.StartIndex - 1] == "p")
                         {
                             _board.board[targetObjectIndex] = ".";
@@ -549,15 +580,15 @@ namespace Chess.Lib
                 }
                 return false;
             }
-            
+
             return false;
         }
 
         public bool GetBlackPawn(MoveObject moveObject)
         {
-            Piece pawn = new Piece(moveObject.SourcePiece);            
+            Piece pawn = new Piece(moveObject.SourcePiece);
             var row = _board.GetCoordinates(moveObject.StartIndex)[1].ToString();
-        
+
             if (pawn.LegalMoves.Contains(moveObject.GetDifference()))
             {
                 if (moveObject.GetDifference() == 16 && row == "7" && _board.board[moveObject.EndIndex] == ".")
