@@ -177,6 +177,8 @@ namespace Chess.Lib
             return false;
         }
 
+        // TODO: Where to call this method to be less expensive, and need to have above conditions to prevent calaling it
+        // If Castle rights are already false 
         public void SetCastleRules(MoveObject moveObject)
         {
             if (moveObject.SourcePiece == "K")
