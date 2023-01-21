@@ -131,13 +131,13 @@ namespace Chess.Lib
                     return false;
                 // Pawns 
                 case "P":
-                    if (GetWhitePawn(moveObject))
+                    if (GetWhitePawn(moveObject)) //Done 
                     {
                         return true;
                     }
                     return false;
                 case "p":
-                    if (GetBlackPawn(moveObject))
+                    if (GetBlackPawn(moveObject)) //Done 
                     {
                         return true;
                     }
