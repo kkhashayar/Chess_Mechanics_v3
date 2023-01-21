@@ -19,6 +19,11 @@ namespace Chess.Lib
         public string BoardStartSquare { get; set; } = string.Empty;
         public string BoardEndSquare { get; set; } = string.Empty;
 
+        public int GetDifferenceOnKingMove()
+        {
+
+            return StartIndex - EndIndex;
+        }
         public int GetDifference()
         {
             if (StartIndex >= EndIndex)

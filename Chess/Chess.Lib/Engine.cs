@@ -671,6 +671,21 @@ namespace Chess.Lib
 
         public bool GetWhiteKing(MoveObject moveObject)
         {
+            if (moveObject.GetDifference() == -2
+                        && WhiteQueenCastle == true
+                        && _board.board[moveObject.StartIndex - 1].ToString() == "."
+                        && _board.board[moveObject.StartIndex - 2].ToString() == "."
+                        && _board.board[moveObject.StartIndex - 3].ToString() == "."
+                        && _board.board[56] == "R")
+            {
+                _board.board[56] = ".";
+                _board.board[59] = "R";
+                // King side castle possible "short" 
+                // Moving the king, what a bout the Rook?
+                WhiteKingCastle = false;
+                WhiteQueenCastle = false;
+                return true;
+            }
             return false;
         }
 
