@@ -1,8 +1,4 @@
 ﻿
-
-using System.Linq;
-using System.Net.NetworkInformation;
-
 namespace Chess.Lib
 {
     public class Engine
@@ -135,13 +131,13 @@ namespace Chess.Lib
                     return false;
                 // Pawns 
                 case "P":
-                    if (GetWhitePawn(moveObject))
+                    if (GetWhitePawn(moveObject)) //Done 
                     {
                         return true;
                     }
                     return false;
                 case "p":
-                    if (GetBlackPawn(moveObject))
+                    if (GetBlackPawn(moveObject)) //Done 
                     {
                         return true;
                     }
@@ -181,14 +177,20 @@ namespace Chess.Lib
             return false;
         }
 
+
+        // Basic function, adding the last move to GameHistory, Note: This is not a notation  
+        public void AddToHistory(MoveObject moveObject)
+        {
+            // Adding only last piece moved to history for now 
+            GameHistory.Add(moveObject.SourcePiece);
+        }
         // Changes the position on boardbased on given move, 
         public void MakeMove(MoveObject moveObject)
         {
             _board.board[moveObject.EndIndex] = moveObject.SourcePiece;
             _board.board[moveObject.StartIndex] = ".";
-            
-            // 
-
+            AddToHistory(moveObject);
+            // TODO Implement --> Read / Write method to and from History
             ShowBoard();
         }
 
@@ -492,29 +494,59 @@ namespace Chess.Lib
                 {
                     return true;
                 }
-                // Left En passant 
-                if(moveObject.GetDifference() * (-1) == -7 || moveObject.GetDifference() * (-1) == -9)
+                // Right En passant
+                if (moveObject.GetDifference() * (-1) == -7)
                 {
-                    // will add to properties 
-                    var leftGap = moveObject.StartIndex += 15; // I think they should be -15 and -17 // to be implemented 
-                    var rightGap = moveObject.EndIndex += 17;
+                    // 
+                    // TODO: Condition if last pawn move was it's first move have to be set in game history, now is always true
+                    // TODO: Might add to properties // looks like no need to check right/left gap 
+                    var tempStartIndex = moveObject.StartIndex;
+                    var tempEndIndex = moveObject.EndIndex;
+                    //var leftGap = tempStartIndex; 
+                    //var rightGap = tempEndIndex;
+
+                    var lastMove = GameHistory.LastOrDefault();
+                    LastMovedPiece = lastMove[0].ToString();
+
                     if (_board.board[moveObject.EndIndex] == "." && LastMovedPiece == "p" && PawnFirstMove == true)
                     {
-                        if (_board.board[moveObject.StartIndex + 1] != null && _board.board[moveObject.StartIndex + 1] == "p")
+                        var targetObject = _board.board[moveObject.StartIndex + 1];
+                        var targetObjectIndex = moveObject.StartIndex + 1;
+                        if (targetObject == "p")
                         {
-                            _board.board[moveObject.StartIndex + 1] = ".";
-                            return true;
-                        }
-                        else if (_board.board[moveObject.StartIndex - 1] != null && _board.board[moveObject.StartIndex - 1] == "p")
-                        {
-                            _board.board[moveObject.StartIndex - 1] = ".";
+                            _board.board[targetObjectIndex] = ".";
                             return true;
                         }
                         return false;
                     }
 
                 }
-                // Right En passant 
+                // Left En passant 
+                if (moveObject.GetDifference() * (-1) == -9)
+                {
+                    // 
+                    // TODO: Condition if last pawn move was it's first move have to be set in game history, now is always true
+                    // TODO: Might add to properties // looks like no need to check right/left gap 
+                    var tempStartIndex = moveObject.StartIndex;
+                    var tempEndIndex = moveObject.EndIndex;
+                    
+
+                    var lastMove = GameHistory.LastOrDefault();
+                    LastMovedPiece = lastMove[0].ToString();
+
+                    if (_board.board[moveObject.EndIndex] == "." && LastMovedPiece == "p" && PawnFirstMove == true)
+                    {
+                        var targetObject = _board.board[moveObject.StartIndex - 1];
+                        var targetObjectIndex = moveObject.StartIndex - 1;
+                  
+                        if (_board.board[moveObject.StartIndex - 1] == "p")
+                        {
+                            _board.board[targetObjectIndex] = ".";
+                            return true;
+                        }
+                        return false;
+                    }
+                }
                 return false;
             }
             
@@ -523,11 +555,7 @@ namespace Chess.Lib
 
         public bool GetBlackPawn(MoveObject moveObject)
         {
-            Piece pawn = new Piece(moveObject.SourcePiece);
-
-            //var leftGap = moveObject.StartIndex -= 15;
-            //var rightGap = moveObject.EndIndex -= 17;
-            
+            Piece pawn = new Piece(moveObject.SourcePiece);            
             var row = _board.GetCoordinates(moveObject.StartIndex)[1].ToString();
         
             if (pawn.LegalMoves.Contains(moveObject.GetDifference()))
@@ -548,7 +576,60 @@ namespace Chess.Lib
                 {
                     return true;
                 }
-                
+
+                // Right En passant
+                if (moveObject.GetDifference() == 9)
+                {
+                    // 
+                    // TODO: Condition if last pawn move was it's first move have to be set in game history, now is always true
+                    // TODO: Might add to properties // looks like no need to check right/left gap 
+                    var tempStartIndex = moveObject.StartIndex;
+                    var tempEndIndex = moveObject.EndIndex;
+                    //var leftGap = tempStartIndex; 
+                    //var rightGap = tempEndIndex;
+
+                    var lastMove = GameHistory.LastOrDefault();
+                    LastMovedPiece = lastMove[0].ToString();
+
+                    if (_board.board[moveObject.EndIndex] == "." && LastMovedPiece == "P" && PawnFirstMove == true)
+                    {
+                        var targetObject = _board.board[moveObject.StartIndex + 1];
+                        var targetObjectIndex = moveObject.StartIndex + 1;
+                        if (targetObject == "P")
+                        {
+                            _board.board[targetObjectIndex] = ".";
+                            return true;
+                        }
+                        return false;
+                    }
+
+                }
+                // Left En passant 
+                if (moveObject.GetDifference() == 7)
+                {
+                    // 
+                    // TODO: Condition if last pawn move was it's first move have to be set in game history, now is always true
+                    // TODO: Might add to properties // looks like no need to check right/left gap 
+                    var tempStartIndex = moveObject.StartIndex;
+                    var tempEndIndex = moveObject.EndIndex;
+
+
+                    var lastMove = GameHistory.LastOrDefault();
+                    LastMovedPiece = lastMove[0].ToString();
+
+                    if (_board.board[moveObject.EndIndex] == "." && LastMovedPiece == "P" && PawnFirstMove == true)
+                    {
+                        var targetObject = _board.board[moveObject.StartIndex - 1];
+                        var targetObjectIndex = moveObject.StartIndex - 1;
+
+                        if (_board.board[moveObject.StartIndex - 1] == "P")
+                        {
+                            _board.board[targetObjectIndex] = ".";
+                            return true;
+                        }
+                        return false;
+                    }
+                }
                 return false;
             }
 
@@ -576,5 +657,8 @@ namespace Chess.Lib
                     "a3", "b3", "c3", "d3", "e3", "f3", "g3", "h3",
                     "a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2",
                     "a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1"
+
+
+
  */
 
