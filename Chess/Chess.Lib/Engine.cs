@@ -671,26 +671,61 @@ namespace Chess.Lib
 
         public bool GetWhiteKing(MoveObject moveObject)
         {
-            if (moveObject.GetDifference() == -2
+            if (moveObject.GetDifferenceOnKingMove() == -2
                         && WhiteQueenCastle == true
                         && _board.board[moveObject.StartIndex - 1].ToString() == "."
                         && _board.board[moveObject.StartIndex - 2].ToString() == "."
                         && _board.board[moveObject.StartIndex - 3].ToString() == "."
                         && _board.board[56] == "R")
-            {
-                _board.board[56] = ".";
-                _board.board[59] = "R";
-                // King side castle possible "short" 
-                // Moving the king, what a bout the Rook?
-                WhiteKingCastle = false;
-                WhiteQueenCastle = false;
-                return true;
-            }
+                {
+                    _board.board[56] = ".";
+                    _board.board[59] = "R";
+                    WhiteKingCastle = false;
+                    WhiteQueenCastle = false;
+                    return true;
+                }
+            else if (moveObject.GetDifferenceOnKingMove() == +2
+                        && WhiteKingCastle == true
+                        && _board.board[moveObject.StartIndex + 1].ToString() == "."
+                        && _board.board[moveObject.StartIndex + 2].ToString() == "."
+                        && _board.board[63] == "R")
+                {
+                    _board.board[63] = ".";
+                    _board.board[61] = "R";
+                    WhiteQueenCastle = false;
+                    WhiteKingCastle = false;
+                    return true;
+                }
             return false;
         }
 
         public bool GetBlackKing(MoveObject moveObject)
         {
+            if (moveObject.GetDifferenceOnKingMove() == -2
+                        && WhiteQueenCastle == true
+                        && _board.board[moveObject.StartIndex - 1].ToString() == "."
+                        && _board.board[moveObject.StartIndex - 2].ToString() == "."
+                        && _board.board[moveObject.StartIndex - 3].ToString() == "."
+                        && _board.board[0] == "r")
+                {
+                    _board.board[0] = ".";
+                    _board.board[3] = "r";
+                    WhiteKingCastle = false;
+                    WhiteQueenCastle = false;
+                    return true;
+                }
+            else if (moveObject.GetDifferenceOnKingMove() == +2
+                        && BlackKingCastle == true
+                        && _board.board[moveObject.StartIndex + 1].ToString() == "."
+                        && _board.board[moveObject.StartIndex + 2].ToString() == "."
+                        && _board.board[7] == "r")
+                {
+                    _board.board[7] = ".";
+                    _board.board[5] = "r";
+                    BlackKingCastle = false;
+                    BlackQueenCastle = false;
+                    return true;
+                }
             return false;
         }
     }
