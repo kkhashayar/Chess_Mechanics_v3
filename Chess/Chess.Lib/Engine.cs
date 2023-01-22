@@ -761,3 +761,11 @@ namespace Chess.Lib
 
  */
 
+
+/*
+ * TOODO:
+ * What are the absolute bare essentials your main objects need?
+ * For instance, your game "engine", what does the engine actually need to do?
+ */
+
+

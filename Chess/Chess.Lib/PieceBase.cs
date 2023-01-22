@@ -23,7 +23,7 @@ namespace Chess.Lib
                 new int[] {-10, 1, 10, -1, -9, -11, 11, 9}, // White Queen --> Not in use
                 new int[] {-1, -8, -2, +1, +8, +2, -9, -7, +9, +7}, // White king 
                 new int[] {+8,+16,+7,+9}, // will be changed
-                new int[] {-6,-10,-15,-17,+6,+10,+15,+17 }, // Knight
+                new int[] {-6,-10,-15,-17,+6,+10,+15,+17 }, // Black Knight
                 new int[] {+8, +16, +7, +9}, // Black pawn
                 new int[] {-1, -8, +1, +8}, //  Black Rook
                 new int[] {-10, 1, 10, -1, -9, -11, 11, 9},// Black Queen --> Not in use
