@@ -45,16 +45,22 @@ namespace Chess.Tests.PieceMovementTests
 
 
 
-        public MoveObject GenerateKnightMove(int startSquare, int endSquare)
+        public List<int> GenerateKnightMove(int startPositionIndex)
         {
-            MoveObject move = new MoveObject()
-            {
-                StartIndex = startSquare,
-                EndIndex = endSquare,
-                SourcePiece = "N"
-            };
+            
+            List<int> moves = new List<int>();
+            List<int> KnightMoves = new List<int> { -6, -10, -15, -17, +6, +10, +15, +17 };
 
-            return move;
+            int startIndex = startPositionIndex;
+            moves.Add(startIndex);
+
+            for (int i = 0; i < KnightMoves.Count; i++)
+            {
+                var endIndex = startIndex += KnightMoves[i];
+                moves.Add(endIndex);
+            }
+
+            return moves;
         }
 
 
