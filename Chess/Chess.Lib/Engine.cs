@@ -272,6 +272,7 @@ namespace Chess.Lib
         public bool GetKnight(MoveObject moveObject)
         {
             Piece newPiece = new Piece(moveObject.SourcePiece);
+            var dif = moveObject.GetDifference();
             if (newPiece.LegalMoves.Contains(moveObject.GetDifference())) return true;
             return false;
         }
