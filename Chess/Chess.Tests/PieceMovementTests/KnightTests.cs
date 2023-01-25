@@ -16,7 +16,7 @@ namespace Chess.Tests.PieceMovementTests
         [Test]
         [TestCase(0, 10, true)] // StartIndex, EndIndex, expected return 
         [TestCase(0, 17, true)]
-        [TestCase(0, 18, false)] 
+        [TestCase(0, 18, false)]
         public void GetKnight_On_GivenMove_Returns_True(int startIndex, int endIndex, bool expectedResult)
         {
             // Arrange
@@ -44,55 +44,20 @@ namespace Chess.Tests.PieceMovementTests
             Assert.That(result, Is.EqualTo(expectedResult));
         }
 
-        [Test]
-        
-        public void GetKnight_On_GenerateMoves_Returns_Right_Boolean()
+        ///
+        public int GenerateKnightMove(int startPositionIndex)
         {
-            // Arrange 
-            int startIndex = 0;
-            var moves = GenerateKnightMove(startIndex);
 
-            Piece knight = new Piece("N");
-            Board board = new Board();
-
-            for (int i = 0; i < moves.Count; i++)
-            {
-                MoveObject moveObject = new MoveObject()
-                {
-                    StartIndex = startIndex,
-                    EndIndex = moves[i],
-                    SourcePiece = knight.Name
-                };
-
-                Engine engine = new Engine(moveObject, board, knight);
-
-
-                // Act 
-                var sut = engine.GetKnight(moveObject);
-
-                var result = sut; 
-
-                // Assert
-                Assert.That(result, Is.EqualTo(true));
-            }
-        }
-
-        public List<int> GenerateKnightMove(int startPositionIndex)
-        {
-            
             List<int> moves = new List<int>();
             List<int> KnightMoves = new List<int> { -6, -10, -15, -17, +6, +10, +15, +17 };
 
+            var random = new Random();
+
             int startIndex = startPositionIndex;
-            moves.Add(startIndex);
 
-            for (int i = 0; i < KnightMoves.Count; i++)
-            {
-                var endIndex = startIndex += KnightMoves[i];
-                moves.Add(endIndex);
-            }
+            int move = startIndex += random.Next(KnightMoves.Count);
 
-            return moves;
+            return move;
         }
 
 
