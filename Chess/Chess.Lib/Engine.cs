@@ -1,5 +1,6 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using System.Data.SqlTypes;
 
 namespace Chess.Lib
 {
@@ -222,11 +223,27 @@ namespace Chess.Lib
         // Changes the position on boardbased on given move, 
         public void MakeMove(MoveObject moveObject)
         {
-            _board.board[moveObject.EndIndex] = moveObject.SourcePiece;
-            _board.board[moveObject.StartIndex] = ".";
-            AddToHistory(moveObject);
-            // TODO Implement --> Read / Write method to and from History
-            ShowBoard();
+            if(Turn == 0 && _piece.whitePieces.Contains(moveObject.SourcePiece))
+            {
+                _board.board[moveObject.EndIndex] = moveObject.SourcePiece;
+                _board.board[moveObject.StartIndex] = ".";
+                AddToHistory(moveObject);
+
+                Turn = 1;
+                // TODO Implement --> Read / Write method to and from History
+                ShowBoard();
+            }
+
+            else if (Turn == 1 && _piece.blackPieces.Contains(moveObject.SourcePiece))
+            {
+                _board.board[moveObject.EndIndex] = moveObject.SourcePiece;
+                _board.board[moveObject.StartIndex] = ".";
+                AddToHistory(moveObject);
+
+                Turn = 0;
+                // TODO Implement --> Read / Write method to and from History
+                ShowBoard();
+            }
         }
 
         public void ShowBoard()
