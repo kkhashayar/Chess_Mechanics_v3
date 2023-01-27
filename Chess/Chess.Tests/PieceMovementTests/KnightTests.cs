@@ -1,6 +1,7 @@
 ﻿using Chess.Lib;
 using NUnit.Framework.Internal;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace Chess.Tests.PieceMovementTests
         [Test]
         [TestCase(0, 10, true)] // StartIndex, EndIndex, expected return 
         [TestCase(0, 17, true)]
-        [TestCase(0, 18, false)] 
+        [TestCase(0, 18, false)]
         public void GetKnight_On_GivenMove_Returns_True(int startIndex, int endIndex, bool expectedResult)
         {
             // Arrange
@@ -43,16 +44,18 @@ namespace Chess.Tests.PieceMovementTests
             Assert.That(result, Is.EqualTo(expectedResult));
         }
 
-
-
-        public MoveObject GenerateKnightMove(int startSquare, int endSquare)
+        ///
+        public int GenerateKnightMove(int startPositionIndex)
         {
-            MoveObject move = new MoveObject()
-            {
-                StartIndex = startSquare,
-                EndIndex = endSquare,
-                SourcePiece = "N"
-            };
+
+            List<int> moves = new List<int>();
+            List<int> KnightMoves = new List<int> { -6, -10, -15, -17, +6, +10, +15, +17 };
+
+            var random = new Random();
+
+            int startIndex = startPositionIndex;
+
+            int move = startIndex += random.Next(KnightMoves.Count);
 
             return move;
         }
