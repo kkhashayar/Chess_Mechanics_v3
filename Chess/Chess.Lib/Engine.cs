@@ -771,8 +771,9 @@ namespace Chess.Lib
             return false;
         }
 
-        public bool IsKingInCheck()
+        public bool IsKingInCheck(MoveObject moveObject)
         {
+    
             return false;
         }
     }
