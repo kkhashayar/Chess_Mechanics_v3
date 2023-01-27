@@ -807,5 +807,6 @@ namespace Chess.Lib
  * 3: If in possible move Can hit the king will break the loop and return true
  * 4: else moves to another piece 
  * 
- * if first stage will scan startsquare and endsquare of kings move 
+ * for first stage will scan startsquare and endsquare of kings move 
+ * for second stage will scan castling, and will add more flags on castle rights 
  */
