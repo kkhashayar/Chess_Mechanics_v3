@@ -44,7 +44,15 @@ namespace Chess.Lib
             {
                 _engine.BlackQueenCastle = true;
             }
-            _engine.Turn = fenList[1];
+            if (fenList[1] == "w")
+            {
+                _engine.Turn = 0; 
+            }
+            else if(fenList[1] == "b")
+            {
+                _engine.Turn = 1;
+            }
+                    
 
             int index = 0;
             foreach (var row in rows)
