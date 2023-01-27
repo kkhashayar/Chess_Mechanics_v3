@@ -770,6 +770,11 @@ namespace Chess.Lib
             }
             return false;
         }
+
+        public bool IsKingInCheck()
+        {
+            return false;
+        }
     }
 }
 
