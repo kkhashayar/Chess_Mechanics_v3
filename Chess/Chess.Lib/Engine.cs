@@ -680,10 +680,9 @@ namespace Chess.Lib
             var testDifference = moveObject.GetDifferenceOnKingMove();
             if (moveObject.GetDifferenceOnKingMove() == -2
                         && WhiteQueenCastle == true
-                        && _board.board[moveObject.StartIndex - 1].ToString() == "."
-                        && _board.board[moveObject.StartIndex - 2].ToString() == "."
-                        && _board.board[moveObject.StartIndex - 3].ToString() == "."
-                        && _board.board[56] == "R")
+                        && _board.board[moveObject.StartIndex + 1].ToString() == "."
+                        && _board.board[moveObject.StartIndex + 2].ToString() == "."
+                        && _board.board[63] == "R")
                 {
                     _board.board[63] = ".";
                     _board.board[61] = "R";
@@ -693,9 +692,10 @@ namespace Chess.Lib
                 }
             else if (moveObject.GetDifferenceOnKingMove() == +2
                         && WhiteKingCastle == true
-                        && _board.board[moveObject.StartIndex + 1].ToString() == "."
-                        && _board.board[moveObject.StartIndex + 2].ToString() == "."
-                        && _board.board[63] == "R")
+                        && _board.board[moveObject.StartIndex - 1].ToString() == "."
+                        && _board.board[moveObject.StartIndex - 2].ToString() == "."
+                        && _board.board[moveObject.StartIndex - 3].ToString() == "."
+                        && _board.board[56] == "R")
                 {
                     _board.board[56] = ".";
                     _board.board[59] = "R";
@@ -703,7 +703,11 @@ namespace Chess.Lib
                     WhiteKingCastle = false;
                     return true;
                 }
-            else if (whiteKing.LegalMoves.Contains(moveObject.GetDifferenceOnKingMove()) && !_piece.whitePieces.Contains(_board.board[moveObject.EndIndex]))
+            return false;
+            
+            if (whiteKing.LegalMoves.Contains(moveObject.GetDifferenceOnKingMove()) 
+                && !_piece.whitePieces.Contains(_board.board[moveObject.EndIndex]) 
+                && _board.board[moveObject.EndIndex] == ".")
             {
                 return true;
             }
@@ -716,10 +720,10 @@ namespace Chess.Lib
             
             if (moveObject.GetDifferenceOnKingMove() == -2
                         && WhiteQueenCastle == true
-                        && _board.board[moveObject.StartIndex - 1].ToString() == "."
-                        && _board.board[moveObject.StartIndex - 2].ToString() == "."
-                        && _board.board[moveObject.StartIndex - 3].ToString() == "."
-                        && _board.board[0] == "r")
+                        && _board.board[moveObject.StartIndex + 1].ToString() == "."
+                        && _board.board[moveObject.StartIndex + 2].ToString() == "."
+                        
+                        && _board.board[7] == "r")
                 {
                     _board.board[7] = ".";
                     _board.board[5] = "r";
@@ -729,9 +733,10 @@ namespace Chess.Lib
                 }
             else if (moveObject.GetDifferenceOnKingMove() == +2
                         && BlackKingCastle == true
-                        && _board.board[moveObject.StartIndex + 1].ToString() == "."
-                        && _board.board[moveObject.StartIndex + 2].ToString() == "."
-                        && _board.board[7] == "r")
+                        && _board.board[moveObject.StartIndex - 1].ToString() == "."
+                        && _board.board[moveObject.StartIndex - 2].ToString() == "."
+                        && _board.board[moveObject.StartIndex - 3].ToString() == "."
+                        && _board.board[0] == "r")
                 {
                     _board.board[0] = ".";
                     _board.board[3] = "r";
@@ -739,7 +744,10 @@ namespace Chess.Lib
                     BlackQueenCastle = false;
                     return true;
                 }
-            else if (blackKing.LegalMoves.Contains(moveObject.GetDifferenceOnKingMove()) && !_piece.blackPieces.Contains(_board.board[moveObject.EndIndex]))
+            return false;
+            if (blackKing.LegalMoves.Contains(moveObject.GetDifferenceOnKingMove()) 
+                && !_piece.blackPieces.Contains(_board.board[moveObject.EndIndex]) 
+                && _board.board[moveObject.EndIndex] == ".")
             {
                 return true;
             }
