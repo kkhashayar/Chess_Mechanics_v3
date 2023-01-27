@@ -773,9 +773,10 @@ namespace Chess.Lib
 
         public bool IsKingInCheck(MoveObject moveObject)
         {
-    
             return false;
         }
+
+        
     }
 }
 
@@ -800,3 +801,11 @@ namespace Chess.Lib
  */
 
 
+/*
+ * 1: Scan the board
+ * 2: For each piece generate all possible moves
+ * 3: If in possible move Can hit the king will break the loop and return true
+ * 4: else moves to another piece 
+ * 
+ * if first stage will scan startsquare and endsquare of kings move 
+ */
