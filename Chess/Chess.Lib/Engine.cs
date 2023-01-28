@@ -246,6 +246,7 @@ namespace Chess.Lib
             }
         }
 
+        //TODO better representation of pieces 
         public void ShowBoard()
         {
             Console.Clear();
