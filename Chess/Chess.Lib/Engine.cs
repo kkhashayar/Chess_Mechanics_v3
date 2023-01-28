@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Data.SqlTypes;
 
+
 namespace Chess.Lib
 {
     public class Engine
@@ -9,10 +10,13 @@ namespace Chess.Lib
         private readonly Board _board;
         private readonly Piece _piece;
         public PieceBase pieceBase = new PieceBase();
+
+
         public Engine(MoveObject moveObject, Board board, Piece piece)
         {
             _board = board;
             _piece = piece;
+
         }
 
         public string inputMove { get; set; }
@@ -68,6 +72,8 @@ namespace Chess.Lib
                 }
                 catch (System.ArgumentOutOfRangeException) { }
             }
+
+
             GetMove();
         }
 
@@ -245,6 +251,10 @@ namespace Chess.Lib
                 ShowBoard();
             }
         }
+
+
+
+
 
         //TODO better representation of pieces 
         public void ShowBoard()
@@ -786,6 +796,38 @@ namespace Chess.Lib
             return false;
         }
 
+        public List<MoveObject> GenerateBlackKnightMove()
+        {
+            var MoveList = new List<MoveObject>();
+
+            for (int i = 0; i < _board.board.Count; i++)
+            {
+                if (_board.board[i] == "N")
+                {
+                    var startIndex = i; 
+                    Piece piece = new Piece
+                    {
+                        Name = _board.board[i],            
+                    };
+
+                    for (int j = 0; j < piece.LegalMoves.Count ; j++)
+                    {
+                        var move = piece.LegalMoves[j] += startIndex;
+                        if(move < _board.board.Count && move >= 0)
+                        {
+                            var moveObject = new MoveObject
+                            {
+                                StartIndex = startIndex,
+                                EndIndex = move,
+                            };
+                            MoveList.Add(moveObject);
+                        }
+                    }
+                }
+            }
+
+            return MoveList; 
+        }
         
     }
 }
