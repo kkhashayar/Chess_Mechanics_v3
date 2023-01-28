@@ -246,6 +246,7 @@ namespace Chess.Lib
             }
         }
 
+        //TODO better representation of pieces 
         public void ShowBoard()
         {
             Console.Clear();
@@ -258,8 +259,20 @@ namespace Chess.Lib
                 for (int file = 0; file < 8; file++)
                 {
                     int square = rank * 8 + file;
-
-                    Console.Write(_board.board[square] + "  ");
+                    if (_board.board[square] != ".")
+                    {
+                        // Dejavu Sans Mono
+                        var piece = _board.board[square];
+                        var pieceIndex = _piece.GetPieceIndex(piece);
+                        var pieceUnicode = _piece.Unicodes[pieceIndex];
+                        Console.OutputEncoding = System.Text.Encoding.Unicode;
+                        Console.Write(pieceUnicode + "  ");
+                    }
+                    if (_board.board[square] == ".")
+                    {
+                        Console.Write(_board.board[square] + "  ");
+                    }
+                    
                 }
                 Console.WriteLine(_board.ranks[rank]);
             }
@@ -770,6 +783,13 @@ namespace Chess.Lib
             }
             return false;
         }
+
+        public bool IsKingInCheck(MoveObject moveObject)
+        {
+            return false;
+        }
+
+        
     }
 }
 
@@ -794,3 +814,12 @@ namespace Chess.Lib
  */
 
 
+/*
+ * 1: Scan the board
+ * 2: For each piece generate all possible moves
+ * 3: If in possible move Can hit the king will break the loop and return true
+ * 4: else moves to another piece 
+ * 
+ * for first stage will scan startsquare and endsquare of kings move 
+ * for second stage will scan castling, and will add more flags on castle rights 
+ */
