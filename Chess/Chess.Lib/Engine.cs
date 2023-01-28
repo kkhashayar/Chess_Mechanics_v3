@@ -250,8 +250,6 @@ namespace Chess.Lib
         public void ShowBoard()
         {
             Console.Clear();
-            Console.WriteLine("***************************");
-
             Console.WriteLine();
             Console.WriteLine();
             for (int rank = 0; rank < 8; rank++)
@@ -271,8 +269,7 @@ namespace Chess.Lib
                     if (_board.board[square] == ".")
                     {
                         Console.Write(_board.board[square] + "  ");
-                    }
-                    
+                    }        
                 }
                 Console.WriteLine(_board.ranks[rank]);
             }
@@ -283,7 +280,7 @@ namespace Chess.Lib
 
             Console.WriteLine("\n************************************");
 
-            Console.WriteLine("************** Position facts ******");
+            Console.WriteLine("************** Position Info ******");
             Console.WriteLine($"W King Castle = {WhiteKingCastle}");
             Console.WriteLine($"W Queen Castle = {WhiteQueenCastle}");
             Console.WriteLine($"B King Castle = {BlackKingCastle}");
@@ -749,7 +746,7 @@ namespace Chess.Lib
             Piece blackKing = new Piece(moveObject.SourcePiece);
             
             if (moveObject.GetDifferenceOnKingMove() == -2
-                        && WhiteQueenCastle == true
+                        && BlackQueenCastle == true
                         && _board.board[moveObject.StartIndex + 1].ToString() == "."
                         && _board.board[moveObject.StartIndex + 2].ToString() == "."
                         
@@ -757,8 +754,8 @@ namespace Chess.Lib
                 {
                     _board.board[7] = ".";
                     _board.board[5] = "r";
-                    WhiteKingCastle = false;
-                    WhiteQueenCastle = false;
+                    BlackKingCastle = false;
+                    BlackQueenCastle = false;
                     return true;
                 }
             else if (moveObject.GetDifferenceOnKingMove() == +2
