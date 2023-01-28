@@ -261,6 +261,7 @@ namespace Chess.Lib
                     int square = rank * 8 + file;
                     if (_board.board[square] != ".")
                     {
+                        // Dejavu Sans Mono
                         var piece = _board.board[square];
                         var pieceIndex = _piece.GetPieceIndex(piece);
                         var pieceUnicode = _piece.Unicodes[pieceIndex];
