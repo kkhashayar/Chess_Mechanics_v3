@@ -649,8 +649,17 @@ namespace Chess.Lib
         {
             Piece whiteKing = new Piece(moveObject.SourcePiece);
             var dif = moveObject.GetDifferenceOnKingMove();
-            
-            var testDifference = moveObject.GetDifferenceOnKingMove();
+           
+            if ((moveObject.GetDifferenceOnKingMove() != -2 || moveObject.GetDifferenceOnKingMove() == 2)
+                && whiteKing.LegalMoves.Contains(moveObject.GetDifferenceOnKingMove())
+                && !_piece.whitePieces.Contains(_board.board[moveObject.EndIndex])
+                && _board.board[moveObject.EndIndex] == ".")
+            {
+                WhiteQueenCastle = false;
+                WhiteKingCastle = false;
+                return true;
+            }
+
             if (moveObject.GetDifferenceOnKingMove() == -2
                         && WhiteQueenCastle == true
                         && _board.board[moveObject.StartIndex + 1].ToString() == "."
@@ -675,17 +684,7 @@ namespace Chess.Lib
                     WhiteQueenCastle = false;
                     WhiteKingCastle = false;
                     return true;
-                }
-            //return false;
-            
-            if (moveObject.GetDifferenceOnKingMove() == -1 || moveObject.GetDifferenceOnKingMove() == +1
-                && !_piece.whitePieces.Contains(_board.board[moveObject.EndIndex]) 
-                && _board.board[moveObject.EndIndex] == ".")
-            {
-                WhiteQueenCastle = false;
-                WhiteKingCastle = false;
-                return true;
-            }
+                }            
             return false;
         }
 
@@ -693,7 +692,16 @@ namespace Chess.Lib
         public bool GetBlackKing(MoveObject moveObject)
         {
             Piece blackKing = new Piece(moveObject.SourcePiece);
-            
+            if ((moveObject.GetDifferenceOnKingMove() != -2 || moveObject.GetDifferenceOnKingMove() == 2)
+                && blackKing.LegalMoves.Contains(moveObject.GetDifferenceOnKingMove())
+                && !_piece.whitePieces.Contains(_board.board[moveObject.EndIndex])
+                && _board.board[moveObject.EndIndex] == ".")
+            {
+                WhiteQueenCastle = false;
+                WhiteKingCastle = false;
+                return true;
+            }
+
             if (moveObject.GetDifferenceOnKingMove() == -2
                         && BlackQueenCastle == true
                         && _board.board[moveObject.StartIndex + 1].ToString() == "."
@@ -720,15 +728,6 @@ namespace Chess.Lib
                     BlackQueenCastle = false;
                     return true;
                 }
-            //return false;
-            if (moveObject.GetDifferenceOnKingMove() == -1 || moveObject.GetDifferenceOnKingMove() == +1
-                && !_piece.blackPieces.Contains(_board.board[moveObject.EndIndex]) 
-                && _board.board[moveObject.EndIndex] == ".")
-            {
-                BlackKingCastle = false;
-                BlackQueenCastle = false;
-                return true;
-            }
             return false;
         }
 
