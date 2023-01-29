@@ -22,6 +22,7 @@ namespace Chess.Lib
         public string inputMove { get; set; }
         public List<Piece> Position = new List<Piece>();
         public string? PieceColor { get; set; }
+        public int PlayerTurn { get; set; } = 0
         public int Turn { get; set; } = 0;  // 0 = white 1 = black
         public List<string> GameHistory { get; set; } = new List<string>();
         public string LastMovedPiece { get; set; }

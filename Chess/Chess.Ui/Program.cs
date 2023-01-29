@@ -9,7 +9,7 @@ Engine chessEngine = new Engine(moveObject, board, piece);
 Fen fen = new Fen(chessEngine, board, piece);
 
 
-fen.FenReader("4k3/8/8/2n5/8/8/8/4K3 w - - 0 1"); 
+fen.FenReader(""); 
 
 chessEngine.Run();
 
