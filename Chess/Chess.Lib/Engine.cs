@@ -232,6 +232,8 @@ namespace Chess.Lib
             Console.WriteLine($"W Queen Castle = {WhiteQueenCastle}");
             Console.WriteLine($"B King Castle = {BlackKingCastle}");
             Console.WriteLine($"B Queen Castle = {BlackQueenCastle}");
+            Console.WriteLine($"Turn = {Turn}");
+            Console.WriteLine($"Player Turn = {PlayerTurn}");
             Console.WriteLine("\n************************************");
 
         }
