@@ -22,7 +22,7 @@ namespace Chess.Lib
         public string inputMove { get; set; }
         public List<Piece> Position = new List<Piece>();
         public string? PieceColor { get; set; }
-        
+
         public int Turn { get; set; } = 0;  // 0 = white 1 = black
         public List<string> GameHistory { get; set; } = new List<string>();
         public string LastMovedPiece { get; set; }
@@ -39,10 +39,6 @@ namespace Chess.Lib
 
         // Assigning pieces after parsing the Fen string
 
-
-
-
-
         public bool IsAPiece(MoveObject moveObject)
         {
             if (moveObject.SourcePiece != ".") return true;
@@ -57,7 +53,6 @@ namespace Chess.Lib
 
             return true;
         }
-
 
         // Piece rules
         public bool IsLegalPieceMove(MoveObject moveObject)
@@ -181,8 +176,6 @@ namespace Chess.Lib
             {
                 BlackQueenCastle = false;
             }
-
-
         }
 
         // Basic function, adding the last move to GameHistory, Note: This is not a notation  
@@ -192,8 +185,7 @@ namespace Chess.Lib
             GameHistory.Add(moveObject.SourcePiece);
         }
 
-        
-        //TODO better representation of pieces 
+
         public void ShowBoard()
         {
             Console.Clear();
@@ -216,7 +208,7 @@ namespace Chess.Lib
                     if (_board.board[square] == ".")
                     {
                         Console.Write(_board.board[square] + "  ");
-                    }        
+                    }
                 }
                 Console.WriteLine(_board.ranks[rank]);
             }
@@ -234,16 +226,22 @@ namespace Chess.Lib
             Console.WriteLine($"B Queen Castle = {BlackQueenCastle}");
             Console.WriteLine($"Turn = {Turn}");
             Console.WriteLine($"Player Turn = {PlayerTurn}");
+
+            if (GameHistory.Count > 0)
+            {
+                foreach (var item in GameHistory)
+                {
+
+                    Console.Write(item);
+                }
+            }
+
+
+
             Console.WriteLine("\n************************************");
 
         }
-        public void Run()
-        {
-            ShowBoard();
 
-            GetMove();
-            Console.ReadKey();
-        }
 
         public bool GetKnight(MoveObject moveObject)
         {
@@ -652,7 +650,7 @@ namespace Chess.Lib
         {
             Piece whiteKing = new Piece(moveObject.SourcePiece);
             var dif = moveObject.GetDifferenceOnKingMove();
-           
+
             if ((moveObject.GetDifferenceOnKingMove() != -2 || moveObject.GetDifferenceOnKingMove() == 2)
                 && whiteKing.LegalMoves.Contains(moveObject.GetDifferenceOnKingMove())
                 && !_piece.whitePieces.Contains(_board.board[moveObject.EndIndex])
@@ -668,30 +666,30 @@ namespace Chess.Lib
                         && _board.board[moveObject.StartIndex + 1].ToString() == "."
                         && _board.board[moveObject.StartIndex + 2].ToString() == "."
                         && _board.board[63] == "R")
-                {
-                    _board.board[63] = ".";
-                    _board.board[61] = "R";
-                    WhiteKingCastle = false;
-                    WhiteQueenCastle = false;
-                    return true;
-                }
+            {
+                _board.board[63] = ".";
+                _board.board[61] = "R";
+                WhiteKingCastle = false;
+                WhiteQueenCastle = false;
+                return true;
+            }
             else if (moveObject.GetDifferenceOnKingMove() == +2
                         && WhiteKingCastle == true
                         && _board.board[moveObject.StartIndex - 1].ToString() == "."
                         && _board.board[moveObject.StartIndex - 2].ToString() == "."
                         && _board.board[moveObject.StartIndex - 3].ToString() == "."
                         && _board.board[56] == "R")
-                {
-                    _board.board[56] = ".";
-                    _board.board[59] = "R";
-                    WhiteQueenCastle = false;
-                    WhiteKingCastle = false;
-                    return true;
-                }            
+            {
+                _board.board[56] = ".";
+                _board.board[59] = "R";
+                WhiteQueenCastle = false;
+                WhiteKingCastle = false;
+                return true;
+            }
             return false;
         }
 
-       
+
         public bool GetBlackKing(MoveObject moveObject)
         {
             Piece blackKing = new Piece(moveObject.SourcePiece);
@@ -709,28 +707,28 @@ namespace Chess.Lib
                         && BlackQueenCastle == true
                         && _board.board[moveObject.StartIndex + 1].ToString() == "."
                         && _board.board[moveObject.StartIndex + 2].ToString() == "."
-                        
+
                         && _board.board[7] == "r")
-                {
-                    _board.board[7] = ".";
-                    _board.board[5] = "r";
-                    BlackKingCastle = false;
-                    BlackQueenCastle = false;
-                    return true;
-                }
+            {
+                _board.board[7] = ".";
+                _board.board[5] = "r";
+                BlackKingCastle = false;
+                BlackQueenCastle = false;
+                return true;
+            }
             else if (moveObject.GetDifferenceOnKingMove() == +2
                         && BlackKingCastle == true
                         && _board.board[moveObject.StartIndex - 1].ToString() == "."
                         && _board.board[moveObject.StartIndex - 2].ToString() == "."
                         && _board.board[moveObject.StartIndex - 3].ToString() == "."
                         && _board.board[0] == "r")
-                {
-                    _board.board[0] = ".";
-                    _board.board[3] = "r";
-                    BlackKingCastle = false;
-                    BlackQueenCastle = false;
-                    return true;
-                }
+            {
+                _board.board[0] = ".";
+                _board.board[3] = "r";
+                BlackKingCastle = false;
+                BlackQueenCastle = false;
+                return true;
+            }
             return false;
         }
 
@@ -742,11 +740,9 @@ namespace Chess.Lib
         // Getting actual input from user or machine, evantually this will move to UI 
         public void GetMove()
         {
-            
+
             Console.Write("\nMove: ");
             var inputMove = Console.ReadLine();
-
-
             if (inputMove != null)
             {
                 try
@@ -770,13 +766,10 @@ namespace Chess.Lib
                             MakeMove(newMove); // Actual move process 
                         }
                     }
-
                 }
                 catch (System.ArgumentOutOfRangeException) { }
             }
-            GetMove();
         }
-
 
         // Changes the position on boardbased on given move, 
         public void MakeMove(MoveObject moveObject)
@@ -788,7 +781,7 @@ namespace Chess.Lib
                 AddToHistory(moveObject);
 
                 Turn = 1;
-                // TODO Implement --> Read / Write method to and from History
+      
                 ShowBoard();
             }
 
@@ -799,44 +792,51 @@ namespace Chess.Lib
                 AddToHistory(moveObject);
 
                 Turn = 0;
-                // TODO Implement --> Read / Write method to and from History
+                
                 ShowBoard();
             }
         }
 
-        public List<MoveObject> GenerateBlackKnightMove()
+        public MoveObject GenerateBlackKnightMove()
         {
-            var MoveList = new List<MoveObject>();
+            var moveObject = new MoveObject();
 
             for (int i = 0; i < _board.board.Count; i++)
             {
-                if (_board.board[i] == "N")
+                if (_board.board[i] == "n")
                 {
-                    var startIndex = i; 
-                    Piece piece = new Piece
-                    {
-                        Name = _board.board[i],            
-                    };
-
-                    for (int j = 0; j < piece.LegalMoves.Count ; j++)
-                    {
-                        var move = piece.LegalMoves[j] += startIndex;
-                        if(move < _board.board.Count && move >= 0)
-                        {
-                            var moveObject = new MoveObject
-                            {
-                                StartIndex = startIndex,
-                                EndIndex = move,
-                            };
-                            MoveList.Add(moveObject);
-                        }
-                    }
+                    var blackNight = new Piece("n");
+                    moveObject.StartIndex = i;
+                    var dif = blackNight.LegalMoves[0];
+                    moveObject.EndIndex = i + dif;
+                    moveObject.SourcePiece = "n";
+                    
                 }
             }
-
-            return MoveList; 
+            return moveObject;
         }
-        
+
+        public void Run()
+        {
+            bool running = true;
+            while (running)
+            {
+                ShowBoard();
+                if (Turn == 0)
+                {
+                    GetMove();
+                }
+                else if (Turn == 1)
+                {           
+                    var move = GenerateBlackKnightMove();
+                    if (IsLegalMove(move))
+                    {
+                        MakeMove(move);
+                    }
+                }
+                //Console.ReadKey();
+            }
+        }
     }
 }
 
