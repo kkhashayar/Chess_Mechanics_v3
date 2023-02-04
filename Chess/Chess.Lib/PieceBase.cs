@@ -4,22 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-/*
- *     char whiteKing = '\u2654';
-       char whiteQueen = '\u2655';
-       char whiteRook = '\u2656';
-       char whiteBishop = '\u2657';
-       char whiteKnight = '\u2658';
-       char whitePawn = '\u2659';
-
-       char blackKing = '\u265A';
-       char blackQueen = '\u265B';
-       char blackRook = '\u265C';
-       char blackBishop = '\u265D';
-       char blackKnight = '\u265E';
-       char blackPawn = '\u265F';
- */
-
 namespace Chess.Lib
 {
     public class PieceBase
