@@ -226,20 +226,6 @@ namespace Chess.Lib
             Console.WriteLine($"B Queen Castle = {BlackQueenCastle}");
             Console.WriteLine($"Turn = {Turn}");
             Console.WriteLine($"Player Turn = {PlayerTurn}");
-
-            if (GameHistory.Count > 0)
-            {
-                foreach (var item in GameHistory)
-                {
-
-                    Console.Write(item);
-                }
-            }
-
-
-
-            Console.WriteLine("\n************************************");
-
         }
 
 
@@ -810,17 +796,16 @@ namespace Chess.Lib
                     var dif = blackNight.LegalMoves[0];
                     moveObject.EndIndex = i + dif;
                     moveObject.SourcePiece = "n";
-                    
                 }
             }
             return moveObject;
         }
-
         public void Run()
         {
             bool running = true;
             while (running)
             {
+                
                 ShowBoard();
                 if (Turn == 0)
                 {
@@ -834,7 +819,6 @@ namespace Chess.Lib
                         MakeMove(move);
                     }
                 }
-                //Console.ReadKey();
             }
         }
     }
@@ -849,6 +833,16 @@ namespace Chess.Lib
   "a3", "b3", "c3", "d3", "e3", "f3", "g3", "h3",
   "a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2",
   "a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1"
+
+
+   "00", "01", "02", "03", "04", "05", "06", "07",
+   "08", "09", "10", "11", "12", "13", "14", "15",
+   "16", "17", "18", "19", "20", "21", "22", "23",
+   "24", "25", "26", "27", "28", "29", "30", "31",
+   "32", "33", "34", "35", "36", "37", "38", "39",
+   "40", "41", "42", "43", "44", "45", "46", "47",
+   "48", "49", "50", "51", "52", "53", "54", "55",
+   "56", "57", "58", "59", "60", "61", "62", "63"
 
  */
 
