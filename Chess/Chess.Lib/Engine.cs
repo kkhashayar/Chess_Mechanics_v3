@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Data.SqlTypes;
 
@@ -779,24 +780,32 @@ namespace Chess.Lib
 
                 Turn = 0;
                 
+                Console.Beep(500,100);
                 ShowBoard();
             }
         }
+
+        
 
         public MoveObject GenerateBlackKnightMove()
         {
             var moveObject = new MoveObject();
 
+            var random = new Random();
             for (int i = 0; i < _board.board.Count; i++)
             {
                 if (_board.board[i] == "n")
                 {
                     var blackNight = new Piece("n");
                     moveObject.StartIndex = i;
-                    var dif = blackNight.LegalMoves[0];
+                    var dif = blackNight.LegalMoves[random.Next(blackNight.LegalMoves.Count)];
                     moveObject.EndIndex = i + dif;
                     moveObject.SourcePiece = "n";
                 }
+            }
+            if(moveObject.EndIndex <0 || moveObject.EndIndex > _board.board.Count)
+            {
+                GenerateBlackKnightMove();
             }
             return moveObject;
         }
@@ -812,7 +821,7 @@ namespace Chess.Lib
                     GetMove();
                 }
                 else if (Turn == 1)
-                {           
+                {
                     var move = GenerateBlackKnightMove();
                     if (IsLegalMove(move))
                     {
