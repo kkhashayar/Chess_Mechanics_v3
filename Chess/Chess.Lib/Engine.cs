@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Data.SqlTypes;
-
+using System.IO.IsolatedStorage;
 
 namespace Chess.Lib
 {
@@ -46,7 +46,7 @@ namespace Chess.Lib
             return false;
         }
 
-        public bool IaOnBoard(MoveObject moveObject)
+        public bool IsOnBoard(MoveObject moveObject)
         {
             if(moveObject.EndIndex <0 || moveObject.EndIndex > _board.board.Count)
             {
@@ -140,19 +140,23 @@ namespace Chess.Lib
             // TODO Legal moves 
 
             // Board check
-            if (IsAPiece(moveObject) == true && IsNotSameColor(moveObject) == true)
+            if (IsOnBoard(moveObject))
             {
-                // Piece rules check
-                if (IsLegalPieceMove(moveObject) == true)
+                //Piece check
+                if (IsAPiece(moveObject) == true && IsNotSameColor(moveObject) == true)
                 {
-                    // King is in check check :D
-                    if (IsKingNotInCheck(moveObject) == true)
+                    // Piece rules check
+                    if (IsLegalPieceMove(moveObject) == true)
                     {
-                        return true;
+                        // King is in check check --> TODO after generating moves, for now pass
+                        if (IsKingNotInCheck(moveObject) == true)
+                        {
+                            return true;
+                        }
+                        return false;
                     }
                     return false;
                 }
-                return false;
             }
             return false;
         }
@@ -357,8 +361,7 @@ namespace Chess.Lib
             // int result_of_9s = moveObject.GetDifference() % 9;
             // int result_of_7s = moveObject.GetDifference() % 7;
 
-
-            if (moveObject.Difference % 9 == 0 || moveObject.Difference % 7 == 0
+            if (moveObject.GetDifference() % 9 == 0 || moveObject.GetDifference() % 7 == 0
                 && moveObject.BoardStartSquare.Substring(0, 1) != moveObject.BoardEndSquare.Substring(0, 1)
                 && moveObject.BoardStartSquare.Substring(0, 2) != moveObject.BoardEndSquare.Substring(0, 2)// Preventing file crossing moves
                 && moveObject.BoardStartSquare.Substring(1, 1) != moveObject.BoardEndSquare.Substring(1, 1)) // Preventing rank crossing moves
@@ -801,22 +804,17 @@ namespace Chess.Lib
         public MoveObject GenerateBlackKnightMove()
         {
             var moveObject = new MoveObject();
-
             var random = new Random();
             for (int i = 0; i < _board.board.Count; i++)
             {
                 if (_board.board[i] == "n")
                 {
-                    var blackNight = new Piece("n");
+                    var piece = new Piece("n");
                     moveObject.StartIndex = i;
-                    var dif = blackNight.LegalMoves[random.Next(blackNight.LegalMoves.Count)];
-                    moveObject.EndIndex = i + dif;
-                    moveObject.SourcePiece = "n";
+                    var dif = piece.LegalMoves[random.Next(piece.LegalMoves.Count)];
+                    moveObject.EndIndex = (moveObject.StartIndex + dif);
+                    moveObject.SourcePiece = piece.Name;
                 }
-            }
-            if(moveObject.EndIndex <0 || moveObject.EndIndex > _board.board.Count)
-            {
-                GenerateBlackKnightMove();
             }
             return moveObject;
         }
