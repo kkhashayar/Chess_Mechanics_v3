@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Data.SqlTypes;
 using System.IO.IsolatedStorage;
-
+using System.Threading;
 namespace Chess.Lib
 {
     public class Engine
@@ -48,7 +48,8 @@ namespace Chess.Lib
 
         public bool IsOnBoard(MoveObject moveObject)
         {
-            if(moveObject.EndIndex <0 || moveObject.EndIndex > _board.board.Count)
+            var inspect_MoveObject = moveObject;
+            if(moveObject.EndIndex <0 || moveObject.EndIndex >= _board.board.Count) // 64
             {
                 return false;
             }
@@ -781,6 +782,8 @@ namespace Chess.Lib
                 AddToHistory(moveObject);
               
                 Turn = 1;
+
+                Console.Beep(700, 200);
                 ShowBoard();
             }
 
@@ -792,11 +795,15 @@ namespace Chess.Lib
 
                 Turn = 0;
                 
-                Console.Beep(500,100);
+                Console.Beep(500,200);
                 ShowBoard();
             }
         }
 
+        /// <summary>
+        /// ///////////////////////////// Random move generator //////////////////////////////////////
+        /// </summary>
+        /// <returns></returns>
         /*
          * Bug 1) Side to side jumb 
          * Bug 2) Capturing same color piece
@@ -818,7 +825,30 @@ namespace Chess.Lib
             }
             return moveObject;
         }
-        public void Run()
+
+        public MoveObject GenerateWhitekKnightMove()
+        {
+            var moveObject = new MoveObject();
+            var random = new Random();
+            for (int i = 0; i < _board.board.Count; i++)
+            {
+                if (_board.board[i] == "N")
+                {
+                    var piece = new Piece("N");
+                    moveObject.StartIndex = i;
+                    var dif = piece.LegalMoves[random.Next(piece.LegalMoves.Count)];
+                    moveObject.EndIndex = (moveObject.StartIndex + dif);
+                    moveObject.SourcePiece = piece.Name;
+                }
+            }
+            return moveObject;
+        }
+
+        /// <summary>
+        /// ///////////////////////////// Random move generator //////////////////////////////////////
+        /// </summary>
+
+        public async void Run()
         {
             bool running = true;
             while (running)
@@ -827,7 +857,13 @@ namespace Chess.Lib
                 ShowBoard();
                 if (Turn == 0)
                 {
-                    GetMove();
+                    //GetMove();
+                    var move = GenerateWhitekKnightMove();
+                    if (IsLegalMove(move))
+                    {
+                        MakeMove(move);
+                    }
+                    Thread.Sleep(200);
                 }
                 else if (Turn == 1)
                 {
@@ -836,6 +872,7 @@ namespace Chess.Lib
                     {
                         MakeMove(move);
                     }
+                    Thread.Sleep(200);
                 }
             }
         }
@@ -854,7 +891,7 @@ namespace Chess.Lib
 
 
     {-6,-10,-15,-17,+6,+10,+15,+17 } removed -6,+6
-
+    new int[] {-10,-15,-17,-6, +6,+10,+15,+17 }, // White Knight
 
    "00", "01", "02", "03", "04", "05", "06", "07",
    "08", "09", "10", "11", "12", "13", "14", "15",
