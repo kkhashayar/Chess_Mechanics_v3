@@ -249,7 +249,19 @@ namespace Chess.Lib
         {
             Piece newPiece = new Piece(moveObject.SourcePiece);
             var dif = moveObject.GetDifference();
-            if (newPiece.LegalMoves.Contains(moveObject.GetDifference())) return true;
+            if (newPiece.LegalMoves.Contains(moveObject.GetDifference()))
+            {
+                var startRank = _board.GetRank(moveObject.StartIndex);
+                var endRank = _board.GetRank(moveObject.EndIndex);
+                var startFile = _board.GetFile(moveObject.StartIndex);
+                var endFile = _board.GetFile(moveObject.EndIndex); 
+
+
+
+
+                return true;
+            }
+                
             return false;
         }
         public bool GetRook(MoveObject moveObject)
@@ -893,14 +905,16 @@ namespace Chess.Lib
     {-6,-10,-15,-17,+6,+10,+15,+17 } removed -6,+6
     new int[] {-10,-15,-17,-6, +6,+10,+15,+17 }, // White Knight
 
-   "00", "01", "02", "03", "04", "05", "06", "07",
-   "08", "09", "10", "11", "12", "13", "14", "15",
-   "16", "17", "18", "19", "20", "21", "22", "23",
-   "24", "25", "26", "27", "28", "29", "30", "31",
-   "32", "33", "34", "35", "36", "37", "38", "39",
-   "40", "41", "42", "43", "44", "45", "46", "47",
-   "48", "49", "50", "51", "52", "53", "54", "55",
-   "56", "57", "58", "59", "60", "61", "62", "63"
+          1     2     3     4     5     6     7     8 
+     
+     1   "00", "01", "02", "03", "04", "05", "06", "07", 
+     2   "08", "09", "10", "11", "12", "13", "14", "15",
+     3   "16", "17", "18", "19", "20", "21", "22", "23",
+     4   "24", "25", "26", "27", "28", "29", "30", "31",
+     5   "32", "33", "34", "35", "36", "37", "38", "39",
+     6   "40", "41", "42", "43", "44", "45", "46", "47",
+     7   "48", "49", "50", "51", "52", "53", "54", "55",
+     8   "56", "57", "58", "59", "60", "61", "62", "63"
 
  */
 
