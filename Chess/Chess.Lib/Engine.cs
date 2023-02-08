@@ -251,15 +251,8 @@ namespace Chess.Lib
             var dif = moveObject.GetDifference();
             if (newPiece.LegalMoves.Contains(moveObject.GetDifference()))
             {
-                var startRank = _board.GetRank(moveObject.StartIndex);
-                var endRank = _board.GetRank(moveObject.EndIndex);
-                var startFile = _board.GetFile(moveObject.StartIndex);
-                var endFile = _board.GetFile(moveObject.EndIndex); 
-
-
-
-
-                return true;
+              // Set Logic here 
+              return true;
             }
                 
             return false;

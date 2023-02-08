@@ -36,27 +36,46 @@ namespace Chess.Lib
                     "a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1"
                 };
 
-        public List<string> ranksAndFiles = new List<string>
+        public List<string> ranksBoard = new List<string>
                 {
-                    "18", "28", "38", "48", "58", "68", "78", "88",
-                    "17", "27", "37", "47", "57", "67", "77", "87",
-                    "16", "26", "36", "46", "56", "66", "76", "86",
-                    "15", "25", "35", "45", "55", "65", "75", "85",
-                    "14", "24", "34", "44", "54", "64", "74", "84",
-                    "13", "23", "33", "43", "53", "63", "73", "83",
-                    "12", "22", "32", "42", "52", "62", "72", "82",
-                    "11", "21", "31", "41", "51", "61", "71", "81"
+                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8"
+                };
+
+        public List<string> filesBoard = new List<string>
+                {
+                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8",
                 };
 
         public int GetRank(int squareIndex)
         {
-            var rankAndFile = ranksAndFiles[squareIndex];
+            var rankAndFile = ranksBoard[squareIndex];
             return Int32.Parse(rankAndFile[0].ToString());  
         }
         public int GetFile(int squareIndex)
         {
-            var rankAndFile = ranksAndFiles[squareIndex];
+            var rankAndFile = filesBoard[squareIndex];
             return Int32.Parse(rankAndFile[1].ToString()); 
+        }
+
+        public int GetRankOrFileDifference(int rankOrFile, int rankOrFileTarget)
+        {
+            if (rankOrFile > rankOrFileTarget) return rankOrFile - rankOrFileTarget;
+            return rankOrFile - rankOrFileTarget;
+           
         }
 
 
