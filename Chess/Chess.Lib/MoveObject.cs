@@ -14,27 +14,24 @@ namespace Chess.Lib
         public int EndIndex { get; set; } = 0;
         public string SourcePiece { get; set; } = string.Empty;
         public string TargetPiece { get; set; } = string.Empty;
-        public int Difference { get; set; } = 0;
         public bool IsLegal { get; set; } = false;
         public string BoardStartSquare { get; set; } = string.Empty;
         public string BoardEndSquare { get; set; } = string.Empty;
 
         public int GetDifferenceOnKingMove()
         {
-
             return StartIndex - EndIndex;
         }
         public int GetDifference()
         {
             if (StartIndex >= EndIndex)
             {
-                Difference = StartIndex - EndIndex;
+                return StartIndex - EndIndex;
             }
             else
             {
-                Difference = EndIndex - StartIndex;
+                return EndIndex - StartIndex;
             }
-            return Difference;
         }
     }
 

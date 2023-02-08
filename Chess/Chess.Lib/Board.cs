@@ -8,7 +8,9 @@ namespace Chess.Lib
 {
     public class Board
     {
+        
         public int[] ranks = new int[8] { 8, 7, 6, 5, 4, 3, 2, 1 };
+        public int[] files = new int[8] { 8, 7, 6, 5, 4, 3, 2, 1 };
 
         public List<string> board = new List<string>
                 {
@@ -33,6 +35,30 @@ namespace Chess.Lib
                     "a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2",
                     "a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1"
                 };
+
+        public List<string> ranksAndFiles = new List<string>
+                {
+                    "18", "28", "38", "48", "58", "68", "78", "88",
+                    "17", "27", "37", "47", "57", "67", "77", "87",
+                    "16", "26", "36", "46", "56", "66", "76", "86",
+                    "15", "25", "35", "45", "55", "65", "75", "85",
+                    "14", "24", "34", "44", "54", "64", "74", "84",
+                    "13", "23", "33", "43", "53", "63", "73", "83",
+                    "12", "22", "32", "42", "52", "62", "72", "82",
+                    "11", "21", "31", "41", "51", "61", "71", "81"
+                };
+
+        public int GetRank(int squareIndex)
+        {
+            var rankAndFile = ranksAndFiles[squareIndex];
+            return Int32.Parse(rankAndFile[0].ToString());  
+        }
+        public int GetFile(int squareIndex)
+        {
+            var rankAndFile = ranksAndFiles[squareIndex];
+            return Int32.Parse(rankAndFile[1].ToString()); 
+        }
+
 
         public string GetCoordinates(int squareIndex)
         {

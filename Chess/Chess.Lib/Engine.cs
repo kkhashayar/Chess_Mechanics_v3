@@ -1,8 +1,9 @@
 ﻿
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Data.SqlTypes;
-
-
+using System.IO.IsolatedStorage;
+using System.Threading;
 namespace Chess.Lib
 {
     public class Engine
@@ -44,6 +45,17 @@ namespace Chess.Lib
             if (moveObject.SourcePiece != ".") return true;
             return false;
         }
+
+        public bool IsOnBoard(MoveObject moveObject)
+        {
+            var inspect_MoveObject = moveObject;
+            if(moveObject.EndIndex <0 || moveObject.EndIndex >= _board.board.Count) // 64
+            {
+                return false;
+            }
+            return true;
+        }
+
         public bool IsNotSameColor(MoveObject moveObject)
         {
             if (pieceBase.whitePieces.Contains(moveObject.SourcePiece) && pieceBase.whitePieces.Contains(moveObject.TargetPiece))
@@ -129,19 +141,23 @@ namespace Chess.Lib
             // TODO Legal moves 
 
             // Board check
-            if (IsAPiece(moveObject) == true && IsNotSameColor(moveObject) == true)
+            if (IsOnBoard(moveObject))
             {
-                // Piece rules check
-                if (IsLegalPieceMove(moveObject) == true)
+                //Piece check
+                if (IsAPiece(moveObject) == true && IsNotSameColor(moveObject) == true)
                 {
-                    // King is in check check :D
-                    if (IsKingNotInCheck(moveObject) == true)
+                    // Piece rules check
+                    if (IsLegalPieceMove(moveObject) == true)
                     {
-                        return true;
+                        // King is in check check --> TODO after generating moves, for now pass
+                        if (IsKingNotInCheck(moveObject) == true)
+                        {
+                            return true;
+                        }
+                        return false;
                     }
                     return false;
                 }
-                return false;
             }
             return false;
         }
@@ -226,20 +242,6 @@ namespace Chess.Lib
             Console.WriteLine($"B Queen Castle = {BlackQueenCastle}");
             Console.WriteLine($"Turn = {Turn}");
             Console.WriteLine($"Player Turn = {PlayerTurn}");
-
-            if (GameHistory.Count > 0)
-            {
-                foreach (var item in GameHistory)
-                {
-
-                    Console.Write(item);
-                }
-            }
-
-
-
-            Console.WriteLine("\n************************************");
-
         }
 
 
@@ -247,7 +249,19 @@ namespace Chess.Lib
         {
             Piece newPiece = new Piece(moveObject.SourcePiece);
             var dif = moveObject.GetDifference();
-            if (newPiece.LegalMoves.Contains(moveObject.GetDifference())) return true;
+            if (newPiece.LegalMoves.Contains(moveObject.GetDifference()))
+            {
+                var startRank = _board.GetRank(moveObject.StartIndex);
+                var endRank = _board.GetRank(moveObject.EndIndex);
+                var startFile = _board.GetFile(moveObject.StartIndex);
+                var endFile = _board.GetFile(moveObject.EndIndex); 
+
+
+
+
+                return true;
+            }
+                
             return false;
         }
         public bool GetRook(MoveObject moveObject)
@@ -360,8 +374,7 @@ namespace Chess.Lib
             // int result_of_9s = moveObject.GetDifference() % 9;
             // int result_of_7s = moveObject.GetDifference() % 7;
 
-
-            if (moveObject.Difference % 9 == 0 || moveObject.Difference % 7 == 0
+            if (moveObject.GetDifference() % 9 == 0 || moveObject.GetDifference() % 7 == 0
                 && moveObject.BoardStartSquare.Substring(0, 1) != moveObject.BoardEndSquare.Substring(0, 1)
                 && moveObject.BoardStartSquare.Substring(0, 2) != moveObject.BoardEndSquare.Substring(0, 2)// Preventing file crossing moves
                 && moveObject.BoardStartSquare.Substring(1, 1) != moveObject.BoardEndSquare.Substring(1, 1)) // Preventing rank crossing moves
@@ -779,9 +792,10 @@ namespace Chess.Lib
                 _board.board[moveObject.EndIndex] = moveObject.SourcePiece;
                 _board.board[moveObject.StartIndex] = ".";
                 AddToHistory(moveObject);
-
+              
                 Turn = 1;
-      
+
+                Console.Beep(700, 200);
                 ShowBoard();
             }
 
@@ -793,62 +807,114 @@ namespace Chess.Lib
 
                 Turn = 0;
                 
+                Console.Beep(500,200);
                 ShowBoard();
             }
         }
 
+        /// <summary>
+        /// ///////////////////////////// Random move generator //////////////////////////////////////
+        /// </summary>
+        /// <returns></returns>
+        /*
+         * Bug 1) Side to side jumb 
+         * Bug 2) Capturing same color piece
+         */
         public MoveObject GenerateBlackKnightMove()
         {
             var moveObject = new MoveObject();
-
+            var random = new Random();
             for (int i = 0; i < _board.board.Count; i++)
             {
                 if (_board.board[i] == "n")
                 {
-                    var blackNight = new Piece("n");
+                    var piece = new Piece("n");
                     moveObject.StartIndex = i;
-                    var dif = blackNight.LegalMoves[0];
-                    moveObject.EndIndex = i + dif;
-                    moveObject.SourcePiece = "n";
-                    
+                    var dif = piece.LegalMoves[random.Next(piece.LegalMoves.Count)];
+                    moveObject.EndIndex = (moveObject.StartIndex + dif);
+                    moveObject.SourcePiece = piece.Name;
                 }
             }
             return moveObject;
         }
 
-        public void Run()
+        public MoveObject GenerateWhitekKnightMove()
+        {
+            var moveObject = new MoveObject();
+            var random = new Random();
+            for (int i = 0; i < _board.board.Count; i++)
+            {
+                if (_board.board[i] == "N")
+                {
+                    var piece = new Piece("N");
+                    moveObject.StartIndex = i;
+                    var dif = piece.LegalMoves[random.Next(piece.LegalMoves.Count)];
+                    moveObject.EndIndex = (moveObject.StartIndex + dif);
+                    moveObject.SourcePiece = piece.Name;
+                }
+            }
+            return moveObject;
+        }
+
+        /// <summary>
+        /// ///////////////////////////// Random move generator //////////////////////////////////////
+        /// </summary>
+
+        public async void Run()
         {
             bool running = true;
             while (running)
             {
+                
                 ShowBoard();
                 if (Turn == 0)
                 {
-                    GetMove();
+                    //GetMove();
+                    var move = GenerateWhitekKnightMove();
+                    if (IsLegalMove(move))
+                    {
+                        MakeMove(move);
+                    }
+                    Thread.Sleep(200);
                 }
                 else if (Turn == 1)
-                {           
+                {
                     var move = GenerateBlackKnightMove();
                     if (IsLegalMove(move))
                     {
                         MakeMove(move);
                     }
+                    Thread.Sleep(200);
                 }
-                //Console.ReadKey();
             }
         }
     }
 }
 
 /*
-  "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8",
-  "a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7",
-  "a6", "b6", "c6", "d6", "e6", "f6", "g6", "h6",
-  "a5", "b5", "c5", "d5", "e5", "f5", "g5", "h5",
-  "a4", "b4", "c4", "d4", "e4", "f4", "g4", "h4",
-  "a3", "b3", "c3", "d3", "e3", "f3", "g3", "h3",
-  "a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2",
-  "a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1"
+   "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8",
+   "a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7",
+   "a6", "b6", "c6", "d6", "e6", "f6", "g6", "h6",
+   "a5", "b5", "c5", "d5", "e5", "f5", "g5", "h5",
+   "a4", "b4", "c4", "d4", "e4", "f4", "g4", "h4",
+   "a3", "b3", "c3", "d3", "e3", "f3", "g3", "h3",
+   "a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2",
+   "a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1"
+
+
+    {-6,-10,-15,-17,+6,+10,+15,+17 } removed -6,+6
+    new int[] {-10,-15,-17,-6, +6,+10,+15,+17 }, // White Knight
+
+          1     2     3     4     5     6     7     8 
+     
+     1   "00", "01", "02", "03", "04", "05", "06", "07", 
+     2   "08", "09", "10", "11", "12", "13", "14", "15",
+     3   "16", "17", "18", "19", "20", "21", "22", "23",
+     4   "24", "25", "26", "27", "28", "29", "30", "31",
+     5   "32", "33", "34", "35", "36", "37", "38", "39",
+     6   "40", "41", "42", "43", "44", "45", "46", "47",
+     7   "48", "49", "50", "51", "52", "53", "54", "55",
+     8   "56", "57", "58", "59", "60", "61", "62", "63"
 
  */
 
