@@ -251,8 +251,28 @@ namespace Chess.Lib
             var dif = moveObject.GetDifference();
             if (newPiece.LegalMoves.Contains(moveObject.GetDifference()))
             {
-              // Set Logic here 
-              return true;
+                // Set Logic here
+                //var randDifference = _board.GetRankOrFileDifference(moveObject.StartIndex, moveObject.EndIndex);
+                //var fileDifference = _board.GetRankOrFileDifference(moveObject.StartIndex, moveObject.EndIndex);
+                var startRank = _board.GetRank(moveObject.StartIndex);
+                var startFile = _board.GetFile(moveObject.StartIndex);
+
+                
+
+                var endRank = _board.GetRank(moveObject.EndIndex);
+                var endFile = _board.GetRank(moveObject.EndIndex);
+
+
+                var totalstart = startRank + startFile;
+                var totalend = endRank+ endFile;
+
+
+                var rankDiffer = _board.GetRankOrFileDifference(startRank, endRank);
+                var fileDiffer = _board.GetRankOrFileDifference(startFile, endFile);
+
+                if ((rankDiffer > 3 || fileDiffer > 3) || (rankDiffer < -3 || fileDiffer < -3 )) return false;
+                
+             return true;
             }
                 
             return false;

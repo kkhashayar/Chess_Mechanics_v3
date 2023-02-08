@@ -38,14 +38,14 @@ namespace Chess.Lib
 
         public List<string> ranksBoard = new List<string>
                 {
-                    "1", "2", "3", "4", "5", "6", "7", "8",
-                    "1", "2", "3", "4", "5", "6", "7", "8",
-                    "1", "2", "3", "4", "5", "6", "7", "8",
-                    "1", "2", "3", "4", "5", "6", "7", "8",
-                    "1", "2", "3", "4", "5", "6", "7", "8",
-                    "1", "2", "3", "4", "5", "6", "7", "8",
-                    "1", "2", "3", "4", "5", "6", "7", "8",
-                    "1", "2", "3", "4", "5", "6", "7", "8"
+                    "8", "8", "8", "8", "8", "8", "8", "8",
+                    "7", "7", "7", "7", "7", "7", "7", "7",
+                    "6", "6", "6", "6", "6", "6", "6", "6",
+                    "5", "5", "5", "5", "5", "5", "5", "5",
+                    "4", "4", "4", "4", "4", "4", "4", "4",
+                    "3", "3", "3", "3", "3", "3", "3", "3",
+                    "2", "2", "2", "2", "2", "2", "2", "2",
+                    "1", "1", "1", "1", "1", "1", "1", "1"
                 };
 
         public List<string> filesBoard = new List<string>
@@ -57,18 +57,19 @@ namespace Chess.Lib
                     "1", "2", "3", "4", "5", "6", "7", "8",
                     "1", "2", "3", "4", "5", "6", "7", "8",
                     "1", "2", "3", "4", "5", "6", "7", "8",
-                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8"
                 };
 
         public int GetRank(int squareIndex)
         {
             var rankAndFile = ranksBoard[squareIndex];
+            
             return Int32.Parse(rankAndFile[0].ToString());  
         }
         public int GetFile(int squareIndex)
         {
             var rankAndFile = filesBoard[squareIndex];
-            return Int32.Parse(rankAndFile[1].ToString()); 
+            return Int32.Parse(rankAndFile[0].ToString()); 
         }
 
         public int GetRankOrFileDifference(int rankOrFile, int rankOrFileTarget)
