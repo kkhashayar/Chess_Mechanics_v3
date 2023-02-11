@@ -62,19 +62,19 @@ namespace Chess.Lib
 
         public int GetRank(int squareIndex)
         {
-            var rankAndFile = ranksBoard[squareIndex];
-            
-            return Int32.Parse(rankAndFile.ToString());  
+            var rank = ranksBoard[squareIndex];
+            var _rank = rank.ToString();
+            return Int32.Parse(_rank);  
         }
         public int GetFile(int squareIndex)
         {
-            var rankAndFile = filesBoard[squareIndex];
-            return Int32.Parse(rankAndFile.ToString()); 
+            var file = filesBoard[squareIndex];
+            var _file = file.ToString(); 
+            return Int32.Parse(file); 
         }
 
         public int GetRankOrFileDifference(int rankOrFile, int rankOrFileTarget)
         {
-            if (rankOrFile > rankOrFileTarget) return rankOrFile - rankOrFileTarget;
             return rankOrFile - rankOrFileTarget;
            
         }

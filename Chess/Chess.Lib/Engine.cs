@@ -49,7 +49,7 @@ namespace Chess.Lib
         public bool IsOnBoard(MoveObject moveObject)
         {
             var inspect_MoveObject = moveObject;
-            if(moveObject.EndIndex <0 || moveObject.EndIndex >= _board.board.Count) // 64
+            if (moveObject.EndIndex < 0 || moveObject.EndIndex >= _board.board.Count) // 64
             {
                 return false;
             }
@@ -242,9 +242,31 @@ namespace Chess.Lib
             Console.WriteLine($"B Queen Castle = {BlackQueenCastle}");
             Console.WriteLine($"Turn = {Turn}");
             Console.WriteLine($"Player Turn = {PlayerTurn}");
-            
+
         }
 
+
+        /*
+         
+                    "8", "8", "8", "8", "8", "8", "8", "8",
+                    "7", "7", "7", "7", "7", "7", "7", "7",
+                    "6", "6", "6", "6", "6", "6", "6", "6",
+                    "5", "5", "5", "5", "5", "5", "5", "5",
+                    "4", "4", "4", "4", "4", "4", "4", "4",
+                    "3", "3", "3", "3", "3", "3", "3", "3",
+                    "2", "2", "2", "2", "2", "2", "2", "2",
+                    "1", "1", "1", "1", "1", "1", "1", "1"
+              
+                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8",
+                    "1", "2", "3", "4", "5", "6", "7", "8"
+                
+         */
 
         public bool GetKnight(MoveObject moveObject)
         {
@@ -253,13 +275,23 @@ namespace Chess.Lib
             if (newPiece.LegalMoves.Contains(moveObject.GetDifference()))
             {
                 // Set Logic here
-                var rankDiffer = _board.GetRankOrFileDifference(_board.GetRank(moveObject.StartIndex), _board.GetRank(moveObject.EndIndex));
-                var fileDiffer = _board.GetRankOrFileDifference(_board.GetFile(moveObject.StartIndex), _board.GetRank(moveObject.EndIndex));
-                if ((rankDiffer <= 2 || rankDiffer >= -2) && (fileDiffer <= 2 || fileDiffer >= -2)) return true;
+                var startRank = _board.GetRank(moveObject.StartIndex);
+                var startFile = _board.GetFile(moveObject.StartIndex);
+
+
+                var endRank = _board.GetFile(moveObject.EndIndex);
+                var endFile = _board.GetFile(moveObject.EndIndex);
+
                
-                return false;
-            }
+                var difRank = endRank - startRank;
+                var difFile = endFile - startFile;
+
+                if (difRank <= -6 || difFile <= -6 || difRank >= 6 || difFile >= 6) return false; 
                 
+                return true;
+
+            }
+
             return false;
         }
         public bool GetRook(MoveObject moveObject)
@@ -790,7 +822,7 @@ namespace Chess.Lib
                 _board.board[moveObject.EndIndex] = moveObject.SourcePiece;
                 _board.board[moveObject.StartIndex] = ".";
                 AddToHistory(moveObject);
-              
+
                 Turn = 1;
 
                 Console.Beep(700, 200);
@@ -804,8 +836,8 @@ namespace Chess.Lib
                 AddToHistory(moveObject);
 
                 Turn = 0;
-                
-                Console.Beep(500,200);
+
+                Console.Beep(500, 200);
                 ShowBoard();
             }
         }
@@ -863,7 +895,7 @@ namespace Chess.Lib
             bool running = true;
             while (running)
             {
-                
+
                 ShowBoard();
                 if (Turn == 0)
                 {
