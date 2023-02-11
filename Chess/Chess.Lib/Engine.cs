@@ -277,8 +277,6 @@ namespace Chess.Lib
                 // Set Logic here
                 var startRank = _board.GetRank(moveObject.StartIndex);
                 var startFile = _board.GetFile(moveObject.StartIndex);
-
-
                 var endRank = _board.GetFile(moveObject.EndIndex);
                 var endFile = _board.GetFile(moveObject.EndIndex);
 
@@ -905,7 +903,7 @@ namespace Chess.Lib
                     {
                         MakeMove(move);
                     }
-                    Thread.Sleep(400);
+                    Thread.Sleep(100);
                 }
                 else if (Turn == 1)
                 {
@@ -914,7 +912,7 @@ namespace Chess.Lib
                     {
                         MakeMove(move);
                     }
-                    Thread.Sleep(400);
+                    Thread.Sleep(100);
                 }
             }
         }
