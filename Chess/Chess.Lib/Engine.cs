@@ -843,10 +843,10 @@ namespace Chess.Lib
         /// <summary>
         /// ///////////////////////////// Random move generator //////////////////////////////////////
         /// </summary>
-        /// <returns></returns>
+        
         /*
-         * Bug 1) Side to side jumb 
-         * Bug 2) Capturing same color piece
+         * Bug 1) Side to side jumb          --> fixed 
+         * Bug 2) Capturing same color piece --> fixed
          */
         public MoveObject GenerateBlackKnightMove()
         {
@@ -854,9 +854,12 @@ namespace Chess.Lib
             var random = new Random();
             for (int i = 0; i < _board.board.Count; i++)
             {
-                if (_board.board[i] == "n")
+                if (_board.board[i] == "n" || _board.board[i] == "N")
                 {
-                    var piece = new Piece("n");
+                    string name = "";
+                    if(Turn == 0) { name = "N"; }
+                    if(Turn == 1) { name = "n"; }
+                    var piece = new Piece(name);
                     moveObject.StartIndex = i;
                     var dif = piece.LegalMoves[random.Next(piece.LegalMoves.Count)];
                     moveObject.EndIndex = (moveObject.StartIndex + dif);
@@ -865,7 +868,6 @@ namespace Chess.Lib
             }
             return moveObject;
         }
-
         public MoveObject GenerateWhitekKnightMove()
         {
             var moveObject = new MoveObject();
@@ -884,6 +886,12 @@ namespace Chess.Lib
             return moveObject;
         }
 
+        public MoveObject GenerateBishopMove()
+        {
+            var moveObject = new MoveObject();
+            return moveObject; 
+        }
+
         /// <summary>
         /// ///////////////////////////// Random move generator //////////////////////////////////////
         /// </summary>
@@ -898,7 +906,7 @@ namespace Chess.Lib
                 if (Turn == 0)
                 {
                     //GetMove();
-                    var move = GenerateWhitekKnightMove();
+                    var move = GenerateBlackKnightMove();
                     if (IsLegalMove(move))
                     {
                         MakeMove(move);
