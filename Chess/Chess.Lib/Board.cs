@@ -64,12 +64,12 @@ namespace Chess.Lib
         {
             var rankAndFile = ranksBoard[squareIndex];
             
-            return Int32.Parse(rankAndFile[0].ToString());  
+            return Int32.Parse(rankAndFile.ToString());  
         }
         public int GetFile(int squareIndex)
         {
             var rankAndFile = filesBoard[squareIndex];
-            return Int32.Parse(rankAndFile[0].ToString()); 
+            return Int32.Parse(rankAndFile.ToString()); 
         }
 
         public int GetRankOrFileDifference(int rankOrFile, int rankOrFileTarget)

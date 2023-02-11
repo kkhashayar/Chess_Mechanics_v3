@@ -242,6 +242,7 @@ namespace Chess.Lib
             Console.WriteLine($"B Queen Castle = {BlackQueenCastle}");
             Console.WriteLine($"Turn = {Turn}");
             Console.WriteLine($"Player Turn = {PlayerTurn}");
+            
         }
 
 
@@ -252,27 +253,11 @@ namespace Chess.Lib
             if (newPiece.LegalMoves.Contains(moveObject.GetDifference()))
             {
                 // Set Logic here
-                //var randDifference = _board.GetRankOrFileDifference(moveObject.StartIndex, moveObject.EndIndex);
-                //var fileDifference = _board.GetRankOrFileDifference(moveObject.StartIndex, moveObject.EndIndex);
-                var startRank = _board.GetRank(moveObject.StartIndex);
-                var startFile = _board.GetFile(moveObject.StartIndex);
-
-                
-
-                var endRank = _board.GetRank(moveObject.EndIndex);
-                var endFile = _board.GetRank(moveObject.EndIndex);
-
-
-                var totalstart = startRank + startFile;
-                var totalend = endRank+ endFile;
-
-
-                var rankDiffer = _board.GetRankOrFileDifference(startRank, endRank);
-                var fileDiffer = _board.GetRankOrFileDifference(startFile, endFile);
-
-                if ((rankDiffer > 3 || fileDiffer > 3) || (rankDiffer < -3 || fileDiffer < -3 )) return false;
-                
-             return true;
+                var rankDiffer = _board.GetRankOrFileDifference(_board.GetRank(moveObject.StartIndex), _board.GetRank(moveObject.EndIndex));
+                var fileDiffer = _board.GetRankOrFileDifference(_board.GetFile(moveObject.StartIndex), _board.GetRank(moveObject.EndIndex));
+                if ((rankDiffer <= 2 || rankDiffer >= -2) && (fileDiffer <= 2 || fileDiffer >= -2)) return true;
+               
+                return false;
             }
                 
             return false;
@@ -888,7 +873,7 @@ namespace Chess.Lib
                     {
                         MakeMove(move);
                     }
-                    Thread.Sleep(200);
+                    Thread.Sleep(400);
                 }
                 else if (Turn == 1)
                 {
@@ -897,7 +882,7 @@ namespace Chess.Lib
                     {
                         MakeMove(move);
                     }
-                    Thread.Sleep(200);
+                    Thread.Sleep(400);
                 }
             }
         }
