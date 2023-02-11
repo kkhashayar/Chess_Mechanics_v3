@@ -848,7 +848,7 @@ namespace Chess.Lib
          * Bug 1) Side to side jumb          --> fixed 
          * Bug 2) Capturing same color piece --> fixed
          */
-        public MoveObject GenerateBlackKnightMove()
+        public MoveObject GenerateKnightMove()
         {
             var moveObject = new MoveObject();
             var random = new Random();
@@ -868,23 +868,7 @@ namespace Chess.Lib
             }
             return moveObject;
         }
-        public MoveObject GenerateWhitekKnightMove()
-        {
-            var moveObject = new MoveObject();
-            var random = new Random();
-            for (int i = 0; i < _board.board.Count; i++)
-            {
-                if (_board.board[i] == "N")
-                {
-                    var piece = new Piece("N");
-                    moveObject.StartIndex = i;
-                    var dif = piece.LegalMoves[random.Next(piece.LegalMoves.Count)];
-                    moveObject.EndIndex = (moveObject.StartIndex + dif);
-                    moveObject.SourcePiece = piece.Name;
-                }
-            }
-            return moveObject;
-        }
+      
 
         public MoveObject GenerateBishopMove()
         {
@@ -906,7 +890,7 @@ namespace Chess.Lib
                 if (Turn == 0)
                 {
                     //GetMove();
-                    var move = GenerateBlackKnightMove();
+                    var move = GenerateKnightMove();
                     if (IsLegalMove(move))
                     {
                         MakeMove(move);
@@ -915,7 +899,7 @@ namespace Chess.Lib
                 }
                 else if (Turn == 1)
                 {
-                    var move = GenerateBlackKnightMove();
+                    var move = GenerateKnightMove();
                     if (IsLegalMove(move))
                     {
                         MakeMove(move);
