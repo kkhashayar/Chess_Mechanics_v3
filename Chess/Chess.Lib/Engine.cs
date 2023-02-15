@@ -401,12 +401,14 @@ namespace Chess.Lib
             // Is move dividable by 9,7 --> diagonal next squares 
             // int result_of_9s = moveObject.GetDifference() % 9;
             // int result_of_7s = moveObject.GetDifference() % 7;
-
-            if (moveObject.GetDifference() % 9 == 0 || moveObject.GetDifference() % 7 == 0
-                && moveObject.BoardStartSquare.Substring(0, 1) != moveObject.BoardEndSquare.Substring(0, 1)
-                && moveObject.BoardStartSquare.Substring(0, 2) != moveObject.BoardEndSquare.Substring(0, 2)// Preventing file crossing moves
-                && moveObject.BoardStartSquare.Substring(1, 1) != moveObject.BoardEndSquare.Substring(1, 1)) // Preventing rank crossing moves
+            var dif = moveObject.GetDifference();
+            if (moveObject.GetDifference() % 9 == 0 || moveObject.GetDifference() % 7 == 0) // Preventing rank crossing moves
             {
+                var currentRank = _board.GetRank(moveObject.StartIndex);
+                var targetRank = _board.GetRank(moveObject.EndIndex);
+                var currentFile = _board.GetFile(moveObject.StartIndex);
+                var targetFile = _board.GetFile(moveObject.EndIndex);
+                if (currentRank == targetRank || currentFile == targetFile) return false; 
                 // +9 up right 
                 // +7 up left
                 if (moveObject.StartIndex > moveObject.EndIndex)
@@ -781,7 +783,6 @@ namespace Chess.Lib
         // Getting actual input from user or machine, evantually this will move to UI 
         public void GetMove()
         {
-
             Console.Write("\nMove: ");
             var inputMove = Console.ReadLine();
             if (inputMove != null)
