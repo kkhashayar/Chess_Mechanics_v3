@@ -280,12 +280,12 @@ namespace Chess.Lib
                 var endRank = _board.GetFile(moveObject.EndIndex);
                 var endFile = _board.GetFile(moveObject.EndIndex);
 
-               
+
                 var difRank = endRank - startRank;
                 var difFile = endFile - startFile;
 
-                if (difRank <= -6 || difFile <= -6 || difRank >= 6 || difFile >= 6) return false; 
-                
+                if (difRank <= -6 || difFile <= -6 || difRank >= 6 || difFile >= 6) return false;
+
                 return true;
 
             }
@@ -843,23 +843,20 @@ namespace Chess.Lib
         /// <summary>
         /// ///////////////////////////// Random move generator //////////////////////////////////////
         /// </summary>
-        
+
         /*
          * Bug 1) Side to side jumb          --> fixed 
          * Bug 2) Capturing same color piece --> fixed
          */
-        public MoveObject GenerateKnightMove()
+        public MoveObject GenerateBlackKnightMove()
         {
             var moveObject = new MoveObject();
             var random = new Random();
             for (int i = 0; i < _board.board.Count; i++)
             {
-                if (_board.board[i] == "n" || _board.board[i] == "N")
+                if (_board.board[i] == "n")
                 {
-                    string name = "";
-                    if(Turn == 0) { name = "N"; }
-                    if(Turn == 1) { name = "n"; }
-                    var piece = new Piece(name);
+                    var piece = new Piece("n");
                     moveObject.StartIndex = i;
                     var dif = piece.LegalMoves[random.Next(piece.LegalMoves.Count)];
                     moveObject.EndIndex = (moveObject.StartIndex + dif);
@@ -868,12 +865,41 @@ namespace Chess.Lib
             }
             return moveObject;
         }
-      
+        public MoveObject GenerateWhitekKnightMove()
+        {
+            var moveObject = new MoveObject();
+            var random = new Random();
+            for (int i = 0; i < _board.board.Count; i++)
+            {
+                if (_board.board[i] == "N")
+                {
+                    var piece = new Piece("N");
+                    moveObject.StartIndex = i;
+                    var dif = piece.LegalMoves[random.Next(piece.LegalMoves.Count)];
+                    moveObject.EndIndex = (moveObject.StartIndex + dif);
+                    moveObject.SourcePiece = piece.Name;
+                }
+            }
+            return moveObject;
+        }
 
         public MoveObject GenerateBishopMove()
         {
             var moveObject = new MoveObject();
-            return moveObject; 
+            var random = new Random();
+            for (int i = 0; i < _board.board.Count; i++)
+            {
+                if (_board.board[i] == "b" || _board.board[i] == "B")
+                {
+                    string name = _board.board[i].ToString();
+                    var piece = new Piece(name);
+                    moveObject.StartIndex = i;
+                    var dif = random.Next(1, 63);
+                    moveObject.EndIndex = (moveObject.StartIndex + dif); //{-9, -7, 9, 7}
+                    moveObject.SourcePiece = piece.Name;
+                }
+            }
+            return moveObject;
         }
 
         /// <summary>
@@ -889,22 +915,27 @@ namespace Chess.Lib
                 ShowBoard();
                 if (Turn == 0)
                 {
-                    //GetMove();
-                    var move = GenerateKnightMove();
-                    if (IsLegalMove(move))
-                    {
-                        MakeMove(move);
-                    }
-                    Thread.Sleep(100);
+                    GetMove();
+                    //var move = GenerateWhitekKnightMove(); // 8/3n4/8/8/8/8/3N4/8 w - - 0 1
+                    //var move = GenerateBishopMove(); // 8/3b4/8/8/8/8/3B4/8 w - - 0 1
+                    //if (IsLegalMove(move))
+                    //{
+                    //    MakeMove(move);
+                    //}
+                    //Thread.Sleep(100);
                 }
                 else if (Turn == 1)
                 {
-                    var move = GenerateKnightMove();
-                    if (IsLegalMove(move))
-                    {
-                        MakeMove(move);
-                    }
-                    Thread.Sleep(100);
+
+                    GetMove();
+
+                    //var move = GenerateBlackKnightMove();
+                    //var move = GenerateBishopMove();
+                    //if (IsLegalMove(move))
+                    //{
+                    //    MakeMove(move);
+                    //}
+                    //Thread.Sleep(100);
                 }
             }
         }
