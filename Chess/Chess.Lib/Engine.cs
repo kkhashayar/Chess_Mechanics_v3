@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data.SqlTypes;
 using System.IO.IsolatedStorage;
@@ -884,25 +885,27 @@ namespace Chess.Lib
             return moveObject;
         }
 
-        public MoveObject GenerateBishopMove()
+        public MoveObject GenerateBishopeMove()
         {
             var moveObject = new MoveObject();
             var random = new Random();
             for (int i = 0; i < _board.board.Count; i++)
             {
-                if (_board.board[i] == "b" || _board.board[i] == "B")
+                if (_board.board[i] == "B")
                 {
                     string name = _board.board[i].ToString();
                     var piece = new Piece(name);
                     moveObject.StartIndex = i;
-                    var dif = random.Next(1, 63);
-                    moveObject.EndIndex = (moveObject.StartIndex + dif); //{-9, -7, 9, 7}
+                    var dif = random.Next(piece.LegalMoves.Count());
+                    var ItemItself = piece.LegalMoves[dif];
+                    var increment = random.Next(1, 7);
+                    moveObject.EndIndex = (moveObject.StartIndex + (ItemItself * increment)); //{-9, -7, 9, 7}
                     moveObject.SourcePiece = piece.Name;
                 }
             }
             return moveObject;
         }
-
+        
         /// <summary>
         /// ///////////////////////////// Random move generator //////////////////////////////////////
         /// </summary>
@@ -916,27 +919,33 @@ namespace Chess.Lib
                 ShowBoard();
                 if (Turn == 0)
                 {
-                    GetMove();
+                    //GetMove();
                     //var move = GenerateWhitekKnightMove(); // 8/3n4/8/8/8/8/3N4/8 w - - 0 1
-                    //var move = GenerateBishopMove(); // 8/3b4/8/8/8/8/3B4/8 w - - 0 1
-                    //if (IsLegalMove(move))
-                    //{
-                    //    MakeMove(move);
-                    //}
-                    //Thread.Sleep(100);
+                    var move = GenerateBishopeMove(); // 8/3b4/8/8/8/8/3B4/8 w - - 0 1
+                    Console.WriteLine($"start{move.StartIndex}, end{move.EndIndex}");
+                    
+                    if (IsLegalMove(move))
+                    {
+                        MakeMove(move);
+                    }
+                    
+                    Thread.Sleep(100);
                 }
                 else if (Turn == 1)
                 {
 
-                    GetMove();
+                    //GetMove();
 
                     //var move = GenerateBlackKnightMove();
-                    //var move = GenerateBishopMove();
-                    //if (IsLegalMove(move))
-                    //{
-                    //    MakeMove(move);
-                    //}
-                    //Thread.Sleep(100);
+                    var move = GenerateBishopeMove();
+                    Console.WriteLine(move);
+                    Console.WriteLine($"start{move.StartIndex}, end{move.EndIndex}");
+                    
+                    if (IsLegalMove(move))
+                    {
+                        MakeMove(move);
+                    }
+                    Thread.Sleep(100);
                 }
             }
         }
