@@ -398,102 +398,38 @@ namespace Chess.Lib
 
         public bool GetBishop(MoveObject moveObject)
         {
-            Path.Clear();
-            // Is move dividable by 9,7 --> diagonal next squares 
-            // int result_of_9s = moveObject.GetDifference() % 9;
-            // int result_of_7s = moveObject.GetDifference() % 7;
-            var dif = moveObject.GetDifference();
-            if (moveObject.GetDifference() % 9 == 0 || moveObject.GetDifference() % 7 == 0) // Preventing rank crossing moves
+            int difference = moveObject.GetDifference();
+
+            // Check if the bishop is moving on a diagonal
+            if (difference % 7 != 0 && difference % 9 != 0)
             {
-                var currentRank = _board.GetRank(moveObject.StartIndex);
-                var targetRank = _board.GetRank(moveObject.EndIndex);
-                var currentFile = _board.GetFile(moveObject.StartIndex);
-                var targetFile = _board.GetFile(moveObject.EndIndex);
-                if (currentRank == targetRank || currentFile == targetFile) return false; 
-                // +9 up right 
-                // +7 up left
-                if (moveObject.StartIndex > moveObject.EndIndex)
+                return false;
+            }
+
+            // Check if the bishop can move to the end position by checking if
+            // there is a clear diagonal path between the start and end positions
+            int direction = 1;
+            if (moveObject.StartIndex > moveObject.EndIndex)
+            {
+                direction = -1;
+            }
+
+            int step = 7;
+            if (difference % 9 == 0)
+            {
+                step = 9;
+            }
+
+            for (int i = 1; i < difference / step; i++)
+            {
+                int tempPath = moveObject.StartIndex + direction * i * step;
+                if (tempPath != moveObject.EndIndex && _board.board[tempPath] != ".")
                 {
-                    if (moveObject.GetDifference() % 9 == 0)
-                    {
-                        for (int i = 1; i < 8; i++)
-                        {
-                            int tempPath = moveObject.StartIndex - (9 * i);
-                            if (tempPath >= moveObject.EndIndex && tempPath <= _board.board.Count)
-                            {
-                                if (tempPath != moveObject.EndIndex)
-                                {
-                                    Path.Add(_board.board[tempPath]);
-                                }
-                            }
-                        }
-                        if (Path.All(x => x == ".") || Path.Count == 0)
-                        {
-                            return true;
-                        }
-                    }
-                    // +7 up left
-                    if (moveObject.GetDifference() % 7 == 0)
-                    {
-                        for (int i = 1; i < 8; i++)
-                        {
-                            int tempPat = moveObject.StartIndex - (7 * i);
-                            if (tempPat >= moveObject.EndIndex && tempPat <= _board.board.Count)
-                            {
-                                if (tempPat != moveObject.EndIndex)
-                                {
-                                    Path.Add(_board.board[tempPat]);
-                                }
-                            }
-                        }
-                        if (Path.All(x => x == ".") || Path.Count == 0)
-                        {
-                            return true;
-                        }
-                    }
-                }
-                else
-                {   // -9 down right
-                    if (moveObject.GetDifference() % 9 == 0)
-                    {
-                        for (int i = 1; i < 7; i++)
-                        {
-                            int tempPath = moveObject.StartIndex + (9 * i);
-                            if (tempPath <= moveObject.EndIndex && tempPath <= _board.board.Count)
-                            {
-                                if (tempPath != moveObject.EndIndex)
-                                {
-                                    Path.Add(_board.board[tempPath]);
-                                }
-                            }
-                        }
-                        if (Path.All(x => x == ".") || Path.Count == 0)
-                        {
-                            return true;
-                        }
-                    }
-                    // -7 down  left
-                    if (moveObject.GetDifference() % 7 == 0)
-                    {
-                        for (int i = 1; i < 7; i++)
-                        {
-                            int tempPat = moveObject.StartIndex + (7 * i);
-                            if (tempPat <= moveObject.EndIndex && tempPat <= _board.board.Count)
-                            {
-                                if (tempPat != moveObject.EndIndex)
-                                {
-                                    Path.Add(_board.board[tempPat]);
-                                }
-                            }
-                        }
-                        if (Path.All(x => x == ".") || Path.Count == 0)
-                        {
-                            return true;
-                        }
-                    }
+                    return false;
                 }
             }
-            return false;
+
+            return true;
         }
 
         public bool GetQueen(MoveObject moveObject)
@@ -919,33 +855,33 @@ namespace Chess.Lib
                 ShowBoard();
                 if (Turn == 0)
                 {
-                    //GetMove();
-                    //var move = GenerateWhitekKnightMove(); // 8/3n4/8/8/8/8/3N4/8 w - - 0 1
-                    var move = GenerateBishopeMove(); // 8/3b4/8/8/8/8/3B4/8 w - - 0 1
-                    Console.WriteLine($"start{move.StartIndex}, end{move.EndIndex}");
+                    GetMove();
+                    ////var move = GenerateWhitekKnightMove(); // 8/3n4/8/8/8/8/3N4/8 w - - 0 1
+                    //var move = GenerateBishopeMove(); // 8/3b4/8/8/8/8/3B4/8 w - - 0 1
+                    //Console.WriteLine($"start{move.StartIndex}, end{move.EndIndex}");
                     
-                    if (IsLegalMove(move))
-                    {
-                        MakeMove(move);
-                    }
+                    //if (IsLegalMove(move))
+                    //{
+                    //    MakeMove(move);
+                    //}
                     
-                    Thread.Sleep(100);
+                    //Thread.Sleep(100);
                 }
                 else if (Turn == 1)
                 {
 
-                    //GetMove();
+                    GetMove();
 
-                    //var move = GenerateBlackKnightMove();
-                    var move = GenerateBishopeMove();
-                    Console.WriteLine(move);
-                    Console.WriteLine($"start{move.StartIndex}, end{move.EndIndex}");
-                    
-                    if (IsLegalMove(move))
-                    {
-                        MakeMove(move);
-                    }
-                    Thread.Sleep(100);
+                    ////var move = GenerateBlackKnightMove();
+                    //var move = GenerateBishopeMove();
+                    //Console.WriteLine(move);
+                    //Console.WriteLine($"start{move.StartIndex}, end{move.EndIndex}");
+
+                    //if (IsLegalMove(move))
+                    //{
+                    //    MakeMove(move);
+                    //}
+                    //Thread.Sleep(100);
                 }
             }
         }
