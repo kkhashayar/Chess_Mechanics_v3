@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data.SqlTypes;
 using System.IO.IsolatedStorage;
+using System.Reflection;
 using System.Threading;
 namespace Chess.Lib
 {
@@ -38,6 +39,7 @@ namespace Chess.Lib
         public bool BlackQueenCastle { get; set; }
 
         public int PlayerTurn { get; set; }
+        public char BishopSymbol { get; set; }
 
         // Assigning pieces after parsing the Fen string
 
@@ -825,23 +827,47 @@ namespace Chess.Lib
         {
             var moveObject = new MoveObject();
             var random = new Random();
+
+            // Find the first bishop on the board with the correct color
+            var bishopPosition = -1;
+            char BishopSymbol;
+            if (Turn == 1)
+            {
+                BishopSymbol = 'b';
+            }
+            else
+            {
+                BishopSymbol = 'B';
+            }
+
             for (int i = 0; i < _board.board.Count; i++)
             {
-                if (_board.board[i] == "B")
+                if (_board.board[i] == BishopSymbol.ToString())
                 {
-                    string name = _board.board[i].ToString();
-                    var piece = new Piece(name);
-                    moveObject.StartIndex = i;
-                    var dif = random.Next(piece.LegalMoves.Count());
-                    var ItemItself = piece.LegalMoves[dif];
-                    var increment = random.Next(1, 7);
-                    moveObject.EndIndex = (moveObject.StartIndex + (ItemItself * increment)); //{-9, -7, 9, 7}
-                    moveObject.SourcePiece = piece.Name;
+                    bishopPosition = i;
+                    break;
                 }
             }
+
+            // If no bishop was found exit the code, for now 
+            if (bishopPosition == -1)
+            {
+                Environment.Exit(0);
+            }
+
+            // Generate a random legal move for the bishop
+
+            var endPosition = bishopPosition + (random.Next(4) * 2 - 3) * (random.Next(1, 7) * 7 + random.Next(1, 7));
+
+
+            moveObject.StartIndex = bishopPosition;
+            moveObject.EndIndex = endPosition;
+            moveObject.SourcePiece = BishopSymbol.ToString();
+
             return moveObject;
+
+           
         }
-        
         /// <summary>
         /// ///////////////////////////// Random move generator //////////////////////////////////////
         /// </summary>
@@ -855,33 +881,33 @@ namespace Chess.Lib
                 ShowBoard();
                 if (Turn == 0)
                 {
-                    GetMove();
-                    ////var move = GenerateWhitekKnightMove(); // 8/3n4/8/8/8/8/3N4/8 w - - 0 1
-                    //var move = GenerateBishopeMove(); // 8/3b4/8/8/8/8/3B4/8 w - - 0 1
-                    //Console.WriteLine($"start{move.StartIndex}, end{move.EndIndex}");
-                    
-                    //if (IsLegalMove(move))
-                    //{
-                    //    MakeMove(move);
-                    //}
-                    
-                    //Thread.Sleep(100);
+                    //GetMove();
+
+                    //var move = GenerateWhitekKnightMove(); // 8/3n4/8/8/8/8/3N4/8 w - - 0 1
+                    var move = GenerateBishopeMove(); // 8/3b4/8/8/8/8/3B4/8 w - - 0 1
+
+
+                    if (IsLegalMove(move))
+                    {
+                        MakeMove(move);
+                    }
+
+                    Thread.Sleep(50);
                 }
                 else if (Turn == 1)
                 {
 
-                    GetMove();
+                    //GetMove();
 
-                    ////var move = GenerateBlackKnightMove();
-                    //var move = GenerateBishopeMove();
-                    //Console.WriteLine(move);
-                    //Console.WriteLine($"start{move.StartIndex}, end{move.EndIndex}");
+                    //var move = GenerateBlackKnightMove();
+                    var move = GenerateBishopeMove();
 
-                    //if (IsLegalMove(move))
-                    //{
-                    //    MakeMove(move);
-                    //}
-                    //Thread.Sleep(100);
+
+                    if (IsLegalMove(move))
+                    {
+                        MakeMove(move);
+                    }
+                    Thread.Sleep(50);
                 }
             }
         }
