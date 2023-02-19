@@ -14,7 +14,7 @@ namespace Chess.Lib
         public int EndIndex { get; set; } = 0;
         public string SourcePiece { get; set; } = string.Empty;
         public string TargetPiece { get; set; } = string.Empty;
-        public bool IsLegal { get; set; } = false;
+        // public bool IsLegal { get; set; } = false;
         public string BoardStartSquare { get; set; } = string.Empty;
         public string BoardEndSquare { get; set; } = string.Empty;
 

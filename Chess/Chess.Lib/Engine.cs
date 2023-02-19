@@ -1,8 +1,10 @@
 ﻿
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data.SqlTypes;
 using System.IO.IsolatedStorage;
+using System.Reflection;
 using System.Threading;
 namespace Chess.Lib
 {
@@ -37,6 +39,7 @@ namespace Chess.Lib
         public bool BlackQueenCastle { get; set; }
 
         public int PlayerTurn { get; set; }
+        public char BishopSymbol { get; set; }
 
         // Assigning pieces after parsing the Fen string
 
@@ -280,12 +283,12 @@ namespace Chess.Lib
                 var endRank = _board.GetFile(moveObject.EndIndex);
                 var endFile = _board.GetFile(moveObject.EndIndex);
 
-               
+
                 var difRank = endRank - startRank;
                 var difFile = endFile - startFile;
 
-                if (difRank <= -6 || difFile <= -6 || difRank >= 6 || difFile >= 6) return false; 
-                
+                if (difRank <= -6 || difFile <= -6 || difRank >= 6 || difFile >= 6) return false;
+
                 return true;
 
             }
@@ -397,100 +400,38 @@ namespace Chess.Lib
 
         public bool GetBishop(MoveObject moveObject)
         {
-            Path.Clear();
-            // Is move dividable by 9,7 --> diagonal next squares 
-            // int result_of_9s = moveObject.GetDifference() % 9;
-            // int result_of_7s = moveObject.GetDifference() % 7;
+            int difference = moveObject.GetDifference();
 
-            if (moveObject.GetDifference() % 9 == 0 || moveObject.GetDifference() % 7 == 0
-                && moveObject.BoardStartSquare.Substring(0, 1) != moveObject.BoardEndSquare.Substring(0, 1)
-                && moveObject.BoardStartSquare.Substring(0, 2) != moveObject.BoardEndSquare.Substring(0, 2)// Preventing file crossing moves
-                && moveObject.BoardStartSquare.Substring(1, 1) != moveObject.BoardEndSquare.Substring(1, 1)) // Preventing rank crossing moves
+            // Check if the bishop is moving on a diagonal
+            if (difference % 7 != 0 && difference % 9 != 0)
             {
-                // +9 up right 
-                // +7 up left
-                if (moveObject.StartIndex > moveObject.EndIndex)
+                return false;
+            }
+
+            // Check if the bishop can move to the end position by checking if
+            // there is a clear diagonal path between the start and end positions
+            int direction = 1;
+            if (moveObject.StartIndex > moveObject.EndIndex)
+            {
+                direction = -1;
+            }
+
+            int step = 7;
+            if (difference % 9 == 0)
+            {
+                step = 9;
+            }
+
+            for (int i = 1; i < difference / step; i++)
+            {
+                int tempPath = moveObject.StartIndex + direction * i * step;
+                if (tempPath != moveObject.EndIndex && _board.board[tempPath] != ".")
                 {
-                    if (moveObject.GetDifference() % 9 == 0)
-                    {
-                        for (int i = 1; i < 8; i++)
-                        {
-                            int tempPath = moveObject.StartIndex - (9 * i);
-                            if (tempPath >= moveObject.EndIndex && tempPath <= _board.board.Count)
-                            {
-                                if (tempPath != moveObject.EndIndex)
-                                {
-                                    Path.Add(_board.board[tempPath]);
-                                }
-                            }
-                        }
-                        if (Path.All(x => x == ".") || Path.Count == 0)
-                        {
-                            return true;
-                        }
-                    }
-                    // +7 up left
-                    if (moveObject.GetDifference() % 7 == 0)
-                    {
-                        for (int i = 1; i < 8; i++)
-                        {
-                            int tempPat = moveObject.StartIndex - (7 * i);
-                            if (tempPat >= moveObject.EndIndex && tempPat <= _board.board.Count)
-                            {
-                                if (tempPat != moveObject.EndIndex)
-                                {
-                                    Path.Add(_board.board[tempPat]);
-                                }
-                            }
-                        }
-                        if (Path.All(x => x == ".") || Path.Count == 0)
-                        {
-                            return true;
-                        }
-                    }
-                }
-                else
-                {   // -9 down right
-                    if (moveObject.GetDifference() % 9 == 0)
-                    {
-                        for (int i = 1; i < 7; i++)
-                        {
-                            int tempPath = moveObject.StartIndex + (9 * i);
-                            if (tempPath <= moveObject.EndIndex && tempPath <= _board.board.Count)
-                            {
-                                if (tempPath != moveObject.EndIndex)
-                                {
-                                    Path.Add(_board.board[tempPath]);
-                                }
-                            }
-                        }
-                        if (Path.All(x => x == ".") || Path.Count == 0)
-                        {
-                            return true;
-                        }
-                    }
-                    // -7 down  left
-                    if (moveObject.GetDifference() % 7 == 0)
-                    {
-                        for (int i = 1; i < 7; i++)
-                        {
-                            int tempPat = moveObject.StartIndex + (7 * i);
-                            if (tempPat <= moveObject.EndIndex && tempPat <= _board.board.Count)
-                            {
-                                if (tempPat != moveObject.EndIndex)
-                                {
-                                    Path.Add(_board.board[tempPat]);
-                                }
-                            }
-                        }
-                        if (Path.All(x => x == ".") || Path.Count == 0)
-                        {
-                            return true;
-                        }
-                    }
+                    return false;
                 }
             }
-            return false;
+
+            return true;
         }
 
         public bool GetQueen(MoveObject moveObject)
@@ -781,7 +722,6 @@ namespace Chess.Lib
         // Getting actual input from user or machine, evantually this will move to UI 
         public void GetMove()
         {
-
             Console.Write("\nMove: ");
             var inputMove = Console.ReadLine();
             if (inputMove != null)
@@ -843,10 +783,10 @@ namespace Chess.Lib
         /// <summary>
         /// ///////////////////////////// Random move generator //////////////////////////////////////
         /// </summary>
-        /// <returns></returns>
+
         /*
-         * Bug 1) Side to side jumb 
-         * Bug 2) Capturing same color piece
+         * Bug 1) Side to side jumb          --> fixed 
+         * Bug 2) Capturing same color piece --> fixed
          */
         public MoveObject GenerateBlackKnightMove()
         {
@@ -865,7 +805,6 @@ namespace Chess.Lib
             }
             return moveObject;
         }
-
         public MoveObject GenerateWhitekKnightMove()
         {
             var moveObject = new MoveObject();
@@ -884,6 +823,51 @@ namespace Chess.Lib
             return moveObject;
         }
 
+        public MoveObject GenerateBishopeMove()
+        {
+            var moveObject = new MoveObject();
+            var random = new Random();
+
+            // Find the first bishop on the board with the correct color
+            var bishopPosition = -1;
+            char BishopSymbol;
+            if (Turn == 1)
+            {
+                BishopSymbol = 'b';
+            }
+            else
+            {
+                BishopSymbol = 'B';
+            }
+
+            for (int i = 0; i < _board.board.Count; i++)
+            {
+                if (_board.board[i] == BishopSymbol.ToString())
+                {
+                    bishopPosition = i;
+                    break;
+                }
+            }
+
+            // If no bishop was found exit the code, for now 
+            if (bishopPosition == -1)
+            {
+                Environment.Exit(0);
+            }
+
+            // Generate a random legal move for the bishop
+
+            var endPosition = bishopPosition + (random.Next(4) * 2 - 3) * (random.Next(1, 7) * 7 + random.Next(1, 7));
+
+
+            moveObject.StartIndex = bishopPosition;
+            moveObject.EndIndex = endPosition;
+            moveObject.SourcePiece = BishopSymbol.ToString();
+
+            return moveObject;
+
+           
+        }
         /// <summary>
         /// ///////////////////////////// Random move generator //////////////////////////////////////
         /// </summary>
@@ -898,21 +882,32 @@ namespace Chess.Lib
                 if (Turn == 0)
                 {
                     //GetMove();
-                    var move = GenerateWhitekKnightMove();
+
+                    //var move = GenerateWhitekKnightMove(); // 8/3n4/8/8/8/8/3N4/8 w - - 0 1
+                    var move = GenerateBishopeMove(); // 8/3b4/8/8/8/8/3B4/8 w - - 0 1
+
+
                     if (IsLegalMove(move))
                     {
                         MakeMove(move);
                     }
-                    Thread.Sleep(100);
+
+                    Thread.Sleep(50);
                 }
                 else if (Turn == 1)
                 {
-                    var move = GenerateBlackKnightMove();
+
+                    //GetMove();
+
+                    //var move = GenerateBlackKnightMove();
+                    var move = GenerateBishopeMove();
+
+
                     if (IsLegalMove(move))
                     {
                         MakeMove(move);
                     }
-                    Thread.Sleep(100);
+                    Thread.Sleep(50);
                 }
             }
         }
