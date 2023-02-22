@@ -755,39 +755,40 @@ namespace Chess.Lib
         // Changes the position on boardbased on given move, 
         public void MakeMove(MoveObject moveObject)
         {
-            if (Turn == 0 && _piece.whitePieces.Contains(moveObject.SourcePiece))
+            if(IsLegalMove(moveObject))
             {
-                _board.board[moveObject.EndIndex] = moveObject.SourcePiece;
-                _board.board[moveObject.StartIndex] = ".";
-                AddToHistory(moveObject);
+                if (Turn == 0 && _piece.whitePieces.Contains(moveObject.SourcePiece))
+                {
+                    _board.board[moveObject.EndIndex] = moveObject.SourcePiece;
+                    _board.board[moveObject.StartIndex] = ".";
+                    AddToHistory(moveObject);
 
-                Turn = 1;
+                    Turn = 1;
 
-                Console.Beep(700, 200);
-                ShowBoard();
+                    Console.Beep(700, 200);
+                    ShowBoard();
+                }
+
+                else if (Turn == 1 && _piece.blackPieces.Contains(moveObject.SourcePiece))
+                {
+                    _board.board[moveObject.EndIndex] = moveObject.SourcePiece;
+                    _board.board[moveObject.StartIndex] = ".";
+                    AddToHistory(moveObject);
+
+                    Turn = 0;
+
+                    Console.Beep(500, 200);
+                    ShowBoard();
+                }
             }
-
-            else if (Turn == 1 && _piece.blackPieces.Contains(moveObject.SourcePiece))
-            {
-                _board.board[moveObject.EndIndex] = moveObject.SourcePiece;
-                _board.board[moveObject.StartIndex] = ".";
-                AddToHistory(moveObject);
-
-                Turn = 0;
-
-                Console.Beep(500, 200);
-                ShowBoard();
-            }
+            
         }
 
         /// <summary>
         /// ///////////////////////////// Random move generator //////////////////////////////////////
         /// </summary>
 
-        /*
-         * Bug 1) Side to side jumb          --> fixed 
-         * Bug 2) Capturing same color piece --> fixed
-         */
+ 
         public MoveObject GenerateBlackKnightMove()
         {
             var moveObject = new MoveObject();
@@ -869,7 +870,7 @@ namespace Chess.Lib
            
         }
         /// <summary>
-        /// ///////////////////////////// Random move generator //////////////////////////////////////
+        /// ///////////////////////////// End of Random move generator //////////////////////////////////////
         /// </summary>
 
         public async void Run()
@@ -881,33 +882,25 @@ namespace Chess.Lib
                 ShowBoard();
                 if (Turn == 0)
                 {
-                    //GetMove();
+                    GetMove();
 
-                    //var move = GenerateWhitekKnightMove(); // 8/3n4/8/8/8/8/3N4/8 w - - 0 1
-                    var move = GenerateBishopeMove(); // 8/3b4/8/8/8/8/3B4/8 w - - 0 1
+                    ////var move = GenerateWhitekKnightMove(); // 8/3n4/8/8/8/8/3N4/8 w - - 0 1
+                    //var move = GenerateBishopeMove(); // 8/3b4/8/8/8/8/3B4/8 w - - 0 1
+                    //MakeMove(move);
 
-
-                    if (IsLegalMove(move))
-                    {
-                        MakeMove(move);
-                    }
-
-                    Thread.Sleep(50);
+                    //Thread.Sleep(50);
                 }
                 else if (Turn == 1)
                 {
 
-                    //GetMove();
+                    GetMove();
 
-                    //var move = GenerateBlackKnightMove();
-                    var move = GenerateBishopeMove();
+                    ////var move = GenerateBlackKnightMove();
+                    //var move = GenerateBishopeMove();
 
+                    //MakeMove(move);
 
-                    if (IsLegalMove(move))
-                    {
-                        MakeMove(move);
-                    }
-                    Thread.Sleep(50);
+                    //Thread.Sleep(50);
                 }
             }
         }
