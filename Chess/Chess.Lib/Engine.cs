@@ -22,6 +22,9 @@ namespace Chess.Lib
 
         }
 
+        // Testing something 
+        public List<Func<MoveObject>> GeneratorMethods { get; set; }
+
         public string inputMove { get; set; }
         public List<Piece> Position = new List<Piece>();
         public string? PieceColor { get; set; }
@@ -889,14 +892,16 @@ namespace Chess.Lib
         
 
         // Testing 
-        public void GetRandomFunction()
+        public Func<MoveObject> GetRandomFunction()
         {
-            var GeneratorMethods = new List<Func<MoveObject>>
+            GeneratorMethods = new List<Func<MoveObject>>
             {
                 () => GenerateKnightMove(),
                 () => GenerateBishopeMove(),
             };
-    
+            Random random = new Random();
+            int index = random.Next(GeneratorMethods.Count);
+            return GeneratorMethods[index];
         }
 
 
@@ -912,8 +917,12 @@ namespace Chess.Lib
                     //GetMove();
 
                     //var move = GenerateWhitekKnightMove(); // 8/3n4/8/8/8/8/3N4/8 w - - 0 1
-                    
-                    var move = GenerateBishopeMove(); // 8/3b4/8/8/8/8/3B4/8 w - - 0 1
+
+                    //var move = GenerateBishopeMove(); // 8/3b4/8/8/8/8/3B4/8 w - - 0 1
+
+
+                    var randomFunction = GetRandomFunction();
+                    var move = randomFunction(); 
                     MakeMove(move);
 
                     Thread.Sleep(50);
@@ -924,8 +933,10 @@ namespace Chess.Lib
                     //GetMove();
 
                     //var move = GenerateBlackKnightMove();
-                    var move = GenerateBishopeMove();
+                    //var move = GenerateBishopeMove();
 
+                    var randomFunction = GetRandomFunction();
+                    var move = randomFunction();
                     MakeMove(move);
 
                     Thread.Sleep(50);
