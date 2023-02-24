@@ -13,7 +13,7 @@ Fen fen = new Fen(chessEngine, board, piece);
 
 
 
-fen.FenReader("b7/8/8/8/8/8/8/B7 w - - 0 1");
+fen.FenReader("b7/8/6n1/8/3N4/8/8/B7 w - - 0 1");
 
 chessEngine.Run();
 

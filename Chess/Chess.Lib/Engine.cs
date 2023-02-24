@@ -796,17 +796,24 @@ namespace Chess.Lib
         /// <summary>
         /// ///////////////////////////// Random move generator //////////////////////////////////////
         /// </summary>
+        
+        public MoveObject GenerateKnightMove()
+        {
+            var moveObject = new MoveObject();
+            var random = new Random();
 
- 
-        public MoveObject GenerateBlackKnightMove()
-        {
-            var moveObject = new MoveObject();
-            var random = new Random();
+            // Finding a first Knight on the board with a right color / Turn 
+            var knightPosition = -1;
+            char knightSymbol;
+            
+            if (Turn == 1) knightSymbol = 'n';
+            else knightSymbol = 'N';
+
             for (int i = 0; i < _board.board.Count; i++)
             {
-                if (_board.board[i] == "n")
+                if (_board.board[i] == knightSymbol.ToString())
                 {
-                    var piece = new Piece("n");
+                    var piece = new Piece(knightSymbol.ToString());
                     moveObject.StartIndex = i;
                     var dif = piece.LegalMoves[random.Next(piece.LegalMoves.Count)];
                     moveObject.EndIndex = (moveObject.StartIndex + dif);
@@ -815,23 +822,23 @@ namespace Chess.Lib
             }
             return moveObject;
         }
-        public MoveObject GenerateWhitekKnightMove()
-        {
-            var moveObject = new MoveObject();
-            var random = new Random();
-            for (int i = 0; i < _board.board.Count; i++)
-            {
-                if (_board.board[i] == "N")
-                {
-                    var piece = new Piece("N");
-                    moveObject.StartIndex = i;
-                    var dif = piece.LegalMoves[random.Next(piece.LegalMoves.Count)];
-                    moveObject.EndIndex = (moveObject.StartIndex + dif);
-                    moveObject.SourcePiece = piece.Name;
-                }
-            }
-            return moveObject;
-        }
+        //public MoveObject GenerateWhitekKnightMove()
+        //{
+        //    var moveObject = new MoveObject();
+        //    var random = new Random();
+        //    for (int i = 0; i < _board.board.Count; i++)
+        //    {
+        //        if (_board.board[i] == "N")
+        //        {
+        //            var piece = new Piece("N");
+        //            moveObject.StartIndex = i;
+        //            var dif = piece.LegalMoves[random.Next(piece.LegalMoves.Count)];
+        //            moveObject.EndIndex = (moveObject.StartIndex + dif);
+        //            moveObject.SourcePiece = piece.Name;
+        //        }
+        //    }
+        //    return moveObject;
+        //}
 
         public MoveObject GenerateBishopeMove()
         {
@@ -875,14 +882,22 @@ namespace Chess.Lib
             moveObject.SourcePiece = bishopSymbol.ToString();
 
             return moveObject;
-
-
         }
         /// <summary>
         /// ///////////////////////////// End of Random move generator //////////////////////////////////////
         /// </summary>
         
 
+        // Testing 
+        public void GetRandomFunction()
+        {
+            var GeneratorMethods = new List<Func<MoveObject>>
+            {
+                () => GenerateKnightMove(),
+                () => GenerateBishopeMove(),
+            };
+    
+        }
 
 
         public async void Run()
@@ -897,6 +912,7 @@ namespace Chess.Lib
                     //GetMove();
 
                     //var move = GenerateWhitekKnightMove(); // 8/3n4/8/8/8/8/3N4/8 w - - 0 1
+                    
                     var move = GenerateBishopeMove(); // 8/3b4/8/8/8/8/3B4/8 w - - 0 1
                     MakeMove(move);
 
