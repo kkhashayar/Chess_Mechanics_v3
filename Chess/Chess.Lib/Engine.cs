@@ -401,7 +401,6 @@ namespace Chess.Lib
         public bool GetBishop(MoveObject moveObject)
         {
             int difference = moveObject.GetDifference();
-
             // Check if the bishop is moving on a diagonal
             if (difference % 7 != 0 && difference % 9 != 0)
             {
