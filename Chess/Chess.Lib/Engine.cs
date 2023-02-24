@@ -408,6 +408,16 @@ namespace Chess.Lib
                 return false;
             }
 
+            // Check if the bishop is moving along the same diagonal
+            int startRank = moveObject.StartIndex / 8;
+            int startFile = moveObject.StartIndex % 8;
+            int endRank = moveObject.EndIndex / 8;
+            int endFile = moveObject.EndIndex % 8;
+            if (Math.Abs(startRank - endRank) != Math.Abs(startFile - endFile))
+            {
+                return false;
+            }
+
             // Check if the bishop can move to the end position by checking if
             // there is a clear diagonal path between the start and end positions
             int direction = 1;
@@ -831,47 +841,50 @@ namespace Chess.Lib
 
             // Find the first bishop on the board with the correct color
             var bishopPosition = -1;
-            char BishopSymbol;
+            char bishopSymbol;
             if (Turn == 1)
             {
-                BishopSymbol = 'b';
+                bishopSymbol = 'b';
             }
             else
             {
-                BishopSymbol = 'B';
+                bishopSymbol = 'B';
             }
 
             for (int i = 0; i < _board.board.Count; i++)
             {
-                if (_board.board[i] == BishopSymbol.ToString())
+                if (_board.board[i] == bishopSymbol.ToString())
                 {
                     bishopPosition = i;
                     break;
                 }
             }
 
-            // If no bishop was found exit the code, for now 
+            // If no bishop was found, exit the code for now 
             if (bishopPosition == -1)
             {
                 Environment.Exit(0);
             }
 
-            // Generate a random legal move for the bishop
-
-            var endPosition = bishopPosition + (random.Next(4) * 2 - 3) * (random.Next(1, 7) * 7 + random.Next(1, 7));
-
+            // Generate a random move that only moves the bishop in a single diagonal
+            int direction = random.Next(2) == 0 ? 1 : -1;
+            int step = random.Next(1, 8);
+            var endPosition = bishopPosition + direction * step * (step % 2 == 0 ? 7 : 9);
 
             moveObject.StartIndex = bishopPosition;
             moveObject.EndIndex = endPosition;
-            moveObject.SourcePiece = BishopSymbol.ToString();
+            moveObject.SourcePiece = bishopSymbol.ToString();
 
             return moveObject;
 
-           
+
         }
         /// <summary>
         /// ///////////////////////////// End of Random move generator //////////////////////////////////////
         /// </summary>
+        
+
+
 
         public async void Run()
         {
@@ -882,25 +895,25 @@ namespace Chess.Lib
                 ShowBoard();
                 if (Turn == 0)
                 {
-                    GetMove();
+                    //GetMove();
 
-                    ////var move = GenerateWhitekKnightMove(); // 8/3n4/8/8/8/8/3N4/8 w - - 0 1
-                    //var move = GenerateBishopeMove(); // 8/3b4/8/8/8/8/3B4/8 w - - 0 1
-                    //MakeMove(move);
+                    //var move = GenerateWhitekKnightMove(); // 8/3n4/8/8/8/8/3N4/8 w - - 0 1
+                    var move = GenerateBishopeMove(); // 8/3b4/8/8/8/8/3B4/8 w - - 0 1
+                    MakeMove(move);
 
-                    //Thread.Sleep(50);
+                    Thread.Sleep(50);
                 }
                 else if (Turn == 1)
                 {
 
-                    GetMove();
+                    //GetMove();
 
-                    ////var move = GenerateBlackKnightMove();
-                    //var move = GenerateBishopeMove();
+                    //var move = GenerateBlackKnightMove();
+                    var move = GenerateBishopeMove();
 
-                    //MakeMove(move);
+                    MakeMove(move);
 
-                    //Thread.Sleep(50);
+                    Thread.Sleep(50);
                 }
             }
         }
